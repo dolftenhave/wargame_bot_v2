@@ -10,10 +10,19 @@ type (
 )
 
 // Initialises a new wargame variable.
-func InitWargame(modes ModeList, maps MapList, server Server) *Wargame {
-	return &Wargame{
-		GameModes: modes,
-		Maps:      maps,
-		Server:    server,
+func NewWargame(modeDataPath string, mapDataPath string, rconConfig RconConfig) (*Wargame, error) {
+	var wargame = new(Wargame)
+	err := wargame.Maps.ReadConfig(mapDataPath)
+	if err != nil {
+		return nil, err
 	}
+	err = wargame.GameModes.ReadConfig(modeDataPath, &wargame.Maps)
+	if err != nil {
+		return nil, err
+	}
+	err = wargame.Server.CreateConn(&rconConfig)
+	if err != nil {
+		return nil, err
+	}
+	return wargame, nil
 }

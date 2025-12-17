@@ -10,6 +10,7 @@ type (
 	// Context of a message recieved form the discord channel.
 	Context struct {
 		Discord     *discordgo.Session
+		Type        *discordgo.InteractionType
 		Guild       *discordgo.Guild
 		TextChannel *discordgo.Channel
 		User        *discordgo.User
@@ -17,13 +18,13 @@ type (
 		Wargame     *wargame.Wargame
 		Args        []string
 
-		Commands BotCommandHandler
+		Interactions BotInteractionHandler
 		Prefix   string
 	}
 )
 
 // Initialises a new Context variable
-func NewContext(discord *discordgo.Session, guild *discordgo.Guild, textChannl *discordgo.Channel, user *discordgo.User, message *discordgo.MessageCreate, commands BotCommandHandler, prefix string, wargame *wargame.Wargame) *Context {
+func NewContext(discord *discordgo.Session, guild *discordgo.Guild, textChannl *discordgo.Channel, user *discordgo.User, message *discordgo.MessageCreate, interactions BotInteractionHandler, prefix string, wargame *wargame.Wargame) *Context {
 	context := new(Context)
 	context.Discord = discord
 	context.Guild = guild
@@ -31,7 +32,7 @@ func NewContext(discord *discordgo.Session, guild *discordgo.Guild, textChannl *
 	context.User = user
 	context.Message = message
 
-	context.Commands = commands
+	context.Interactions = interactions
 	context.Prefix = prefix
 	context.Wargame = wargame
 	return context

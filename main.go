@@ -7,7 +7,6 @@ import (
 	"wargame-bot/discord"
 	"wargame-bot/wargame"
 
-	"github.com/bwmarrin/discordgo"
 	"gopkg.in/yaml.v2"
 )
 
@@ -16,7 +15,7 @@ const CONFIGPATH = "conf.yaml"
 type (
 	// Contains the paths to the config files for the various components.
 	Conf struct {
-		Discord discord.BotConfig `yaml:"discord"`
+		Discord discord.BotConfig  `yaml:"discord"`
 		Rcon    wargame.RconConfig `yaml:"rcon"`
 		Wargame struct {
 			Modes string `yaml:"modes"`
@@ -26,7 +25,6 @@ type (
 )
 
 var (
-	botId       string
 	wargameData *wargame.Wargame
 )
 
@@ -49,8 +47,6 @@ func main() {
 	var (
 		conf Conf
 		err  error
-
-		session *discordgo.Session
 	)
 
 	log.SetFlags(log.Ldate | log.Ltime)
@@ -61,37 +57,14 @@ func main() {
 		log.Fatalf("Error loading the the main conf.yaml.\n%s", err.Error())
 	}
 
-	wargameData = new(wargame.Wargame)
-
-	err = wargameData.Maps.ReadConfig(conf.Wargame.Maps)
+	wargameData, err = wargame.NewWargame(conf.Wargame.Modes, conf.Wargame.Maps, conf.Rcon)
 	if err != nil {
-		log.Fatalf("Error loading maps.\n%s", err.Error())
+		log.Fatalf("Error: %s\n", err.Error())
 	}
 
-	err = wargameData.GameModes.ReadConfig(conf.Wargame.Modes, &wargameData.Maps)
+	_, err = discord.StartBot(conf.Discord, wargameData)
 	if err != nil {
-		log.Fatalf("Error loading maps.\n%s", err.Error())
-	}
-
-	err = wargameData.Server.CreateConn(&conf.Rcon)
-	if err != nil {
-		log.Fatalf("Error creating a connection to the wargame server\n%s", err.Error())
-	}
-
-	session, err = discordgo.New("Bot " + conf.Discord.Token)
-	if err != nil {
-		log.Fatalf("Error creating discordgo session.\n%s", err.Error())
-	}
-	usr, err := session.User("@me")
-	if err != nil {
-		log.Fatalf("Error setting discordgo user.\n%s", err.Error())
-	}
-
-	botId = usr.ID
-
-	err = session.Open()
-	if err != nil {
-		log.Fatalf("Error opening connection to the discord server.\n%s", err.Error())
+		log.Fatalf("Error starting discord bot.\n%s", err.Error())
 	}
 
 	log.Println("Bot Ready")
