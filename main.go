@@ -25,7 +25,6 @@ type (
 var (
 	botId       string
 	wargameData *wargame.Wargame
-	maps        *wargame.MapList
 )
 
 // Initalises the conf variale using the yaml file in CONFIGPATH
@@ -61,13 +60,16 @@ func main() {
 		log.Fatalf("Error loading the the main conf.yaml.\n%s", err.Error())
 	}
 
-	maps = new(wargame.MapList)
-	err = maps.ReadConfig(conf.WargameMaps)
+	wargameData = new(wargame.Wargame)
+
+	err = wargameData.Maps.ReadConfig(conf.WargameMaps)
 	if err != nil {
 		log.Fatalf("Error loading maps.\n%s", err.Error())
 	}
 
-	err = modes.ReadConfig(conf.WargameModes, maps)
+	fmt.Println(len(wargameData.Maps))
+
+	err = modes.ReadConfig(conf.WargameModes, &wargameData.Maps)
 	if err != nil {
 		log.Fatalf("Error loading maps.\n%s", err.Error())
 	}
@@ -81,9 +83,7 @@ func main() {
 	//if err != nil {
 	//	log.Fatalf("Error Creating a discord session.\n%s", err.Error())
 	//}
-
-	modes[0].PrintMaps()
-	modes.WriteConfig()
 	//<-make(chan struct{})
+	wargameData.GameModes[0].PrintMaps()
 	fmt.Println("Done.")
 }

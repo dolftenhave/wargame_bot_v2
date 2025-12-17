@@ -46,14 +46,8 @@ func (modes *ModeList) ReadConfig(filePath string, maps *MapList) error {
 	}
 
 	// Creates a map list with only the maps in the MapListID
-	for _, mode := range *modes {
-		mode.MapList = mode.GetMaps(*maps)
-		mode.PrintMaps()
-	}
-
-	fmt.Printf("maps:%v, modes:%v\n", len(*maps), len(*modes))
-	for _, mode := range *modes {
-		mode.PrintMaps()
+	for i := range *modes {
+		(*modes)[i].MapList = (*modes)[i].GetMaps(*maps)
 	}
 
 	return nil
