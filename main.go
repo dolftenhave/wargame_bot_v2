@@ -16,10 +16,12 @@ const CONFIGPATH = "conf.yaml"
 type (
 	// Contains the paths to the config files for the various components.
 	Conf struct {
-		DiscordConf  string `yaml:"discord_conf"`
-		RconConf     string `yaml:"rcon_conf"`
-		WargameModes string `yaml:"wargame_modes"`
-		WargameMaps  string `yaml:"wargame_maps"`
+		Discord discord.BotConfig `yaml:"discord"`
+		Rcon    wargame.RconConfig `yaml:"rcon"`
+		Wargame struct {
+			Modes string `yaml:"modes"`
+			Maps  string `yaml:"maps"`
+		} `yaml:"wargame"`
 	}
 )
 
@@ -61,28 +63,22 @@ func main() {
 
 	wargameData = new(wargame.Wargame)
 
-	err = wargameData.Maps.ReadConfig(conf.WargameMaps)
+	err = wargameData.Maps.ReadConfig(conf.Wargame.Maps)
 	if err != nil {
 		log.Fatalf("Error loading maps.\n%s", err.Error())
 	}
 
-	err = wargameData.GameModes.ReadConfig(conf.WargameModes, &wargameData.Maps)
+	err = wargameData.GameModes.ReadConfig(conf.Wargame.Modes, &wargameData.Maps)
 	if err != nil {
 		log.Fatalf("Error loading maps.\n%s", err.Error())
 	}
 
-	err = wargameData.Server.CreateConn(conf.RconConf)
+	err = wargameData.Server.CreateConn(&conf.Rcon)
 	if err != nil {
 		log.Fatalf("Error creating a connection to the wargame server\n%s", err.Error())
 	}
 
-	var bConf = new(discord.BotConfig)
-	err = bConf.ReadConfig(conf.DiscordConf)
-	if err != nil {
-		log.Fatalf("Error Creating a discord session.\n%s", err.Error())
-	}
-
-	session, err = discordgo.New("Bot " + bConf.Token)
+	session, err = discordgo.New("Bot " + conf.Discord.Token)
 	if err != nil {
 		log.Fatalf("Error creating discordgo session.\n%s", err.Error())
 	}

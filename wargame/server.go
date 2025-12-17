@@ -3,10 +3,8 @@ package wargame
 import (
 	"fmt"
 	"log"
-	"os"
 
 	rcon "github.com/gorcon/rcon"
-	"gopkg.in/yaml.v2"
 )
 
 type (
@@ -34,32 +32,9 @@ const (
 	Running
 )
 
-// Loads the rcon connection string
-func (c *RconConfig) GetConf(path string) error {
-	yamlFile, err := os.ReadFile(path)
-	if err != nil {
-		return err
-	}
-
-	err = yaml.Unmarshal(yamlFile, c)
-	if err != nil {
-		return err
-	}
-	return nil
-}
 
 // Creates a connection with the server.
-func (s *Server) CreateConn(confPath string) error {
-	var (
-		err  error
-		conf RconConfig
-	)
-
-	err = conf.GetConf(confPath)
-	if err != nil {
-		return err
-	}
-
+func (s *Server) CreateConn(conf *RconConfig) error {
 	conn, err := rcon.Dial(fmt.Sprintf("%s:%s", conf.Ip, conf.Port), conf.Pword)
 	if err != nil {
 		return err

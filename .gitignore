@@ -31,5 +31,4 @@ go.work.sum
 # .idea/
 # .vscode/
 
-rcon/rcon_conf.yaml
-discord/discord_conf.yaml
+conf.yaml

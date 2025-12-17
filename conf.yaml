@@ -1,4 +1,0 @@
-discord_conf: "discord/discord_conf.yaml"
-rcon_conf: "rcon/rcon_conf.yaml"
-wargame_modes: "wargame/gamemodes.json"
-wargame_maps: "wargame/maps.csv"
