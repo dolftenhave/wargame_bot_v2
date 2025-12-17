@@ -2,6 +2,7 @@ package wargame
 
 import (
 	"fmt"
+	"log"
 	"os"
 
 	rcon "github.com/gorcon/rcon"
@@ -63,6 +64,7 @@ func (s *Server) CreateConn(confPath string) error {
 	if err != nil {
 		return err
 	}
+	log.Println("[Server] Connection Created.")
 	conn.Close()
 
 	s.Conn = *conn

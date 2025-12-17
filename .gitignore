@@ -31,5 +31,5 @@ go.work.sum
 # .idea/
 # .vscode/
 
-wargame_rcon/conf.yaml
-discord/conf.yaml
+rcon/rcon_conf.yaml
+discord/discord_conf.yaml
