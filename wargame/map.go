@@ -25,7 +25,6 @@ type (
 func (maps *MapList) ReadConfig(filePath string) error {
 	csvFile, err := os.Open(filePath)
 
-
 	if err != nil {
 		return err
 	}
@@ -61,4 +60,9 @@ func (maps *MapList) ReadConfig(filePath string) error {
 
 func (m Map) PrintMap() {
 	fmt.Printf("%s, %s, %v, %s\n", m.Code, m.Name, m.Type, m.Image)
+}
+
+// Returns a formatted string of the map data.
+func (m Map) ToString() string {
+	return fmt.Sprintf("Type: %v, Name: %s, Code: %s, Image: %s", m.Type, m.Name, m.Code, m.Image)
 }

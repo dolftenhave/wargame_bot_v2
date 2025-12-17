@@ -82,6 +82,7 @@ func main() {
 	//	log.Fatalf("Error Creating a discord session.\n%s", err.Error())
 	//}
 
+	modes[0].PrintMaps()
 	modes.WriteConfig()
 	//<-make(chan struct{})
 	fmt.Println("Done.")

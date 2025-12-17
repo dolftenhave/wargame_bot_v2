@@ -9,7 +9,7 @@ import (
 type (
 	Mode struct {
 		Name           string `json:"name"`
-		MapListID      []*int `json:"maps"`
+		MapListID      []int  `json:"maps"`
 		MapList        MapList
 		TeamSize       int  `json:"teamSize"`
 		StartingPoints int  `json:"startingPoints"`
@@ -48,6 +48,12 @@ func (modes *ModeList) ReadConfig(filePath string, maps *MapList) error {
 	// Creates a map list with only the maps in the MapListID
 	for _, mode := range *modes {
 		mode.MapList = mode.GetMaps(*maps)
+		mode.PrintMaps()
+	}
+
+	fmt.Printf("maps:%v, modes:%v\n", len(*maps), len(*modes))
+	for _, mode := range *modes {
+		mode.PrintMaps()
 	}
 
 	return nil
@@ -76,7 +82,20 @@ func (m Mode) GetMaps(maps MapList) MapList {
 
 	var result MapList
 	for _, id := range m.MapListID {
-		result = append(result, maps[*id])
+		result = append(result, maps[id])
 	}
+
 	return result
+}
+
+func (m Mode) PrintMaps() {
+	var msg = "Available Maps:\n"
+	if len(m.MapList) < 1 {
+		msg += "None."
+	} else {
+		for _, m := range m.MapList {
+			msg += fmt.Sprintf("- %s\n", m.ToString())
+		}
+	}
+	fmt.Println(msg)
 }
