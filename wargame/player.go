@@ -3,14 +3,13 @@ package wargame
 import (
 	"fmt"
 	"strings"
-
-	"github.com/bwmarrin/discordgo"
 )
 
 type (
 	Player struct {
 		Name string
 		ID   string
+		Deck Deck
 	}
 
 	PlayerList map[string]Player

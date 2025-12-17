@@ -1,0 +1,51 @@
+[
+  {
+    "name": "2v2 Tourney Server",
+    "maps": [
+      1,
+      2,
+      3
+    ],
+    "teamSize": 2,
+    "startingPoints": 750,
+    "timeLimit": 3000,
+    "scoreLimit": 500,
+    "income": 2,
+    "gameMode": 4,
+    "oposition": 0,
+    "nations": -1,
+    "era": -1,
+    "theme": -1,
+    "autoStart": false,
+    "minPlayers": 4,
+    "warmupTime": 15,
+    "deployTime": 180,
+    "debriefTime": 45,
+    "loadingTime": 280
+  },
+  {
+    "name": "NZ Tactical | Vote Map",
+    "maps": [
+      5,
+      4,
+      6,
+      8
+    ],
+    "teamSize": 10,
+    "startingPoints": 5500,
+    "timeLimit": 3000,
+    "scoreLimit": 8000,
+    "income": 1,
+    "gameMode": 1,
+    "oposition": 0,
+    "nations": -1,
+    "era": -1,
+    "theme": -1,
+    "autoStart": true,
+    "minPlayers": 19,
+    "warmupTime": 15,
+    "deployTime": 180,
+    "debriefTime": 60,
+    "loadingTime": 120
+  }
+]
