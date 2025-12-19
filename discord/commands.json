@@ -1,0 +1,71 @@
+{
+	"interactions": [
+		{
+			"name": "help",
+			"type": 1,
+			"description": "Lists all commands and what they do",
+			"options": []
+		},
+		{
+			"name": "setdeck",
+			"type": 1,
+			"description": "Sets your deck",
+			"options": [
+				{
+					"name": "player",
+					"description": "The player that the deck will be set for",
+					"type": 3,
+					"required": true
+				},
+				{
+					"name": "deckcode",
+					"description": "Your deck code",
+					"type": 3,
+					"required": true
+				}
+			]
+		},
+		{
+			"name": "map",
+			"description": "Set or show the available maps.",
+			"options": [
+				{
+					"name": "list",
+					"type": 1,
+					"description": "List of available maps"
+				},
+				{
+					"name": "set",
+					"type": 1,
+					"description": "Set the map"
+				},
+				{
+					"name": "random",
+					"type": 1,
+					"description": "Selects a random map."
+				},
+				{
+					"name": "vote",
+					"type": 1,
+					"description": "Vote for the next map."
+				}
+			]
+		},
+		{
+			"name": "mode",
+			"description": "List of available modes",
+			"options": [
+				{
+					"name": "list",
+					"type": 1,
+					"description": "List of available modes"
+				},
+				{
+					"name": "set",
+					"type": 1,
+					"description": "Set the mode"
+				}
+			]
+		}
+	]
+}

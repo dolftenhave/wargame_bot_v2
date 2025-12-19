@@ -68,6 +68,6 @@ func main() {
 	}
 
 	log.Println("Bot Ready")
-	//<-make(chan struct{})
+	<-make(chan struct{})
 	fmt.Println("Done.")
 }

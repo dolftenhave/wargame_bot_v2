@@ -1,10 +1,13 @@
 package discord
 
 import (
+	"github.com/bwmarrin/discordgo"
+	"log"
 )
 
 type (
-	Interaction    func(Context)
+	Interaction func(Context)
+
 	BotInteraction struct {
 		interaction Interaction
 		help        string
@@ -15,14 +18,57 @@ type (
 	BotInteractionHandler struct {
 		interactions InteractionList
 	}
-
-	// A configuration for the discord bot.
-	BotConfig struct {
-		Token    string `yaml:"bot_token"`
-		Owner_id string `yaml:"owner_id"`
-		Prefix   string `yaml:"interaction_prefix"`
-	}
 )
+
+func messageReciever(s *discordgo.Session, m *discordgo.MessageCreate) {
+	log.Printf("[Discord] Recieved: ID: %s, Type: %s", m.ID, m.Type)
+}
+
+// Sets up the interaction handler for an interaction.
+func interactionHandler(s *discordgo.Session, i *discordgo.InteractionCreate) {
+	log.Printf("[D-Interaction] Recieved: ID: %s, Type: %s", i.ID, i.Type)
+	var sender string
+	var user *discordgo.User
+
+	switch i.Type {
+	case discordgo.InteractionApplicationCommand:
+		sender = i.ID
+	default:
+		log.Println("[Interaction] Wrong type")
+		return
+	}
+
+	channel, err := s.State.Channel(i.ChannelID)
+	if err != nil {
+		log.Println("[Discord] Failed to get channelID")
+		return
+	}
+
+	guild, err := s.State.Guild(channel.GuildID)
+	if err != nil {
+		log.Println("[Discord] Failed to get guildID")
+	}
+
+	if i.User == nil {
+		user = i.Member.User
+	} else {
+		user = i.User
+	}
+
+	log.Printf("[D-Interaction] Token: %s, Name: %s", i.Token, sender)
+
+	interaction, found := handler.Find(sender)
+	if found != true {
+		log.Println("[D-Interaction] No handler found")
+		return
+	}
+
+	context := NewContext(s, i, guild, channel, user, w)
+	context.LogRecieved()
+
+	c := *interaction
+	c(*context)
+}
 
 func NewInteractionHandler() *BotInteractionHandler {
 	return &BotInteractionHandler{make(InteractionList)}
