@@ -58,16 +58,40 @@ func StartBot(conf BotConfig, wargameData *wargame.Wargame) (*discordgo.Session,
 	}
 
 	w = wargameData
+    err = registerCommands(session)
+	if err != nil {
+		return nil, err
+	}
+
 	handler = NewInteractionHandler()
-	registerInteractions()
+	registerHandlers()
 	session.AddHandler(interactionHandler)
 	session.AddHandler(messageReciever)
 
-	AdvertiseCapabilites(session)
 	if err != nil {
 		return nil, err
 	}
 	return session, nil
+}
+
+func registerCommands(s *discordgo.Session) error {
+	// Manually listing out commands since there are only a few
+	commands := make([]*discordgo.ApplicationCommand, 5)
+	commands = append(commands, HelpCommand())
+	commands = append(commands, DeckCommand())
+	commands = append(commands, ModeCommand())
+	commands = append(commands, MapCommand())
+
+	log.Println("[Discord] Regisetring slash commands")
+	// Registering the commands with discord.
+	for _, c := range commands {
+		_, err := s.ApplicationCommandCreate(APP_ID, GUILD_ID, c)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
 }
 
 // Loads all the commands in the commands file into an array
@@ -106,6 +130,6 @@ func AdvertiseCapabilites(s *discordgo.Session) error {
 }
 
 // Registers a list of interactions that will be used by the interaction handler.
-func registerInteractions() {
-	handler.Register("1451706471845859378", Help, "This lists all the available commands.")
+func registerHandlers() {
+	handler.Register("help", HelpHandler, "This lists all the available commands.")
 }

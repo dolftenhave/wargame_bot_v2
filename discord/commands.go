@@ -29,23 +29,61 @@ func HelpCommand() *discordgo.ApplicationCommand {
 // Set Deck
 // Replies to the command with the emojis's of the nation, sepc and era of the deck.
 // If it is not a deck then the command says so.
-func SetDeck() *discordgo.ApplicationCommand {
-	return &discordgo.ApplicationCommand{}
+func DeckCommand() *discordgo.ApplicationCommand {
+	return &discordgo.ApplicationCommand{
+		Name:        "deck",
+		Type:        discordgo.ChatApplicationCommand,
+		Description: "Set your deck.",
+		Options: []*discordgo.ApplicationCommandOption{
+			{
+				Name:        "set",
+				Description: "Set your deck.",
+				Type:        discordgo.ApplicationCommandOptionType(discordgo.ChatApplicationCommand),
+				// TODO integrate permissions.
+			},
+			{
+				Name:        "decode",
+				Description: "Descodes a deck for you.",
+				Type:        discordgo.ApplicationCommandOptionType(discordgo.ChatApplicationCommand),
+				Options: []*discordgo.ApplicationCommandOption{
+					{
+						Name:        "code",
+						Description: "The deck code.",
+						Type:        discordgo.ApplicationCommandOptionString,
+						Required:    true,
+					},
+				},
+			},
+		},
+	}
 }
 
 // Wargame Pannel
 // This will bring up a complex pannel for managing the state of the server.
-func RCON() *discordgo.ApplicationCommand {
+func PannelCommand() *discordgo.ApplicationCommand {
 	return &discordgo.ApplicationCommand{}
 }
 
 // Set Mode
 // This will let you set and see the mode of the current server.
-func SetMode() *discordgo.ApplicationCommand {
+func ModeCommand() *discordgo.ApplicationCommand {
 	return &discordgo.ApplicationCommand{
 		Name:        "mode",
 		Type:        discordgo.ChatApplicationCommand,
 		Description: "Set or change the mode of the server.",
+		Options: []*discordgo.ApplicationCommandOption{
+			{
+				Name:        "set",
+				Description: "Set the mode to one of the available options.",
+				Type:        discordgo.ApplicationCommandOptionType(discordgo.ChatApplicationCommand),
+				// TODO integrate permissions.
+			},
+			{
+				Name:        "list",
+				Description: "See all the available modes.",
+				Type:        discordgo.ApplicationCommandOptionType(discordgo.ChatApplicationCommand),
+			},
+		},
 	}
 }
 
@@ -54,6 +92,33 @@ func SetMode() *discordgo.ApplicationCommand {
 // Sub Commands.
 //   - Auto complete list for all maps in the mode.
 //   - Auto a random map.
-func Map() *discordgo.ApplicationCommand {
-	return &discordgo.ApplicationCommand{}
+func MapCommand() *discordgo.ApplicationCommand {
+	return &discordgo.ApplicationCommand{
+		Name:        "map",
+		Type:        discordgo.ChatApplicationCommand,
+		Description: "See or change the current map.",
+		Options: []*discordgo.ApplicationCommandOption{
+			{
+				Name:        "set",
+				Description: "Set the map.",
+				Type:        discordgo.ApplicationCommandOptionType(discordgo.ChatApplicationCommand),
+				// TODO integrate permissions.
+			},
+			{
+				Name:        "list",
+				Description: "See a list of available maps.",
+				Type:        discordgo.ApplicationCommandOptionType(discordgo.ChatApplicationCommand),
+			},
+			{
+				Name:        "vote",
+				Description: "Start a map vote.",
+				Type:        discordgo.ApplicationCommandOptionType(discordgo.ChatApplicationCommand),
+			},
+			{
+				Name:        "random",
+				Description: "Sets a random map.",
+				Type:        discordgo.ApplicationCommandOptionType(discordgo.ChatApplicationCommand),
+			},
+		},
+	}
 }
