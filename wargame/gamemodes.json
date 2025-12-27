@@ -24,7 +24,7 @@
     "loadingTime": 280
   },
   {
-    "name": "NZ Tactical | Vote Map",
+    "name": "[+20%][Tactical] Happy New Year",
     "maps": [
       5,
       4,
@@ -36,7 +36,7 @@
     "timeLimit": 3000,
     "scoreLimit": 8000,
     "income": 1,
-    "gameMode": 1,
+    "gameMode": 3,
     "oposition": 0,
     "nations": -1,
     "era": -1,

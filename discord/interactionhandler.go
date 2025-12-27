@@ -33,6 +33,8 @@ func interactionHandler(s *discordgo.Session, i *discordgo.InteractionCreate) {
 	switch i.Type {
 	case discordgo.InteractionApplicationCommand:
 		sender = i.ID
+	case discordgo.InteractionMessageComponent:
+		sender = i.Message.Author.GlobalName
 	default:
 		log.Println("[Interaction] Wrong type")
 		return
@@ -79,7 +81,7 @@ func CommandNotImplemented(s *discordgo.Session, i *discordgo.InteractionCreate)
 		Type: discordgo.InteractionResponseChannelMessageWithSource,
 		Data: &discordgo.InteractionResponseData{
 			Content: "Sorry, this command has not yet been implemented.",
-			Flags: discordgo.MessageFlagsEphemeral,
+			Flags:   discordgo.MessageFlagsEphemeral,
 		},
 	})
 }

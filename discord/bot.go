@@ -126,4 +126,5 @@ func registerHandlers() {
 	handler.Register("help", HelpHandler, "This lists all the available commands.")
 	handler.Register("mode", ModeHandler, "Lets you set or change the game mode.")
 	handler.Register("map", MapHandler, "Map stuff")
+	handler.Register("set_mode", SetModeHandler, "Sets the mode")
 }

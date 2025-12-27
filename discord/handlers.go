@@ -4,6 +4,8 @@ package discord
 
 import (
 	"fmt"
+	"log"
+	"wargame-bot/wargame"
 
 	"github.com/bwmarrin/discordgo"
 )
@@ -14,6 +16,9 @@ func SomethingWentWrong(c Context, message string) {
 	if message != "" {
 		content += fmt.Sprintf("\nMessage: ", message)
 	}
+
+	log.Printf("[Discord] Error: %s", message)
+
 	c.Session.InteractionRespond(c.Interaction.Interaction, &discordgo.InteractionResponse{
 		Type: discordgo.InteractionResponseChannelMessageWithSource,
 		Data: &discordgo.InteractionResponseData{
@@ -109,12 +114,116 @@ func listModes(c Context) {
 }
 
 // Lets you set the current game mode.
+// Sends a drop down list with available modes, or sets the mode if a mode was selected.
 func setModes(c Context) {
-	CommandNotImplemented(c.Session, c.Interaction)
+	options := c.Interaction.Interaction.ApplicationCommandData().Options
+	options = options[0].Options
+
+	if options == nil || len(options) < 1 || options[0].Name == "" {
+		if len(c.Wargame.GameModes) < 1 {
+			SomethingWentWrong(c, "There are no game modes to choose from")
+			return
+		}
+
+		log.Printf("[Discord] %s is selecting a mode.", c.User.GlobalName)
+
+		var mo []discordgo.SelectMenuOption
+
+		for _, m := range c.Wargame.GameModes {
+			var label string
+			if m.Name == c.Wargame.Server.Mode.Name {
+				label = fmt.Sprintf("**%s**", m.Name)
+			} else {
+				label = m.Name
+			}
+			mo = append(mo, discordgo.SelectMenuOption{
+				Label:       label,
+				Value:       m.Name,
+				Description: "",
+				Default:     false,
+			})
+		}
+
+		err := c.Session.InteractionRespond(c.Interaction.Interaction, &discordgo.InteractionResponse{
+			Type: discordgo.InteractionResponseChannelMessageWithSource,
+			Data: &discordgo.InteractionResponseData{
+				Components: []discordgo.MessageComponent{
+					discordgo.ActionsRow{
+						Components: []discordgo.MessageComponent{
+							discordgo.SelectMenu{
+								CustomID:    "select_mode",
+								Placeholder: "Select a mode...",
+								Options:     mo,
+							},
+						},
+					},
+				},
+				Flags: discordgo.MessageFlagsEphemeral,
+			},
+		})
+
+		if err != nil {
+			log.Printf("[Discord] Error: %s", err.Error())
+		}
+		return
+	}
+
+	var mode *wargame.Mode
+	for _, m := range c.Wargame.GameModes {
+		if m.Name == options[0].Value {
+			mode = &m
+			break
+		}
+	}
+
+	if mode == nil {
+		SomethingWentWrong(c, fmt.Sprintf("Mode '%s' doesn't exist", options[0].Name))
+		return
+	}
+
+	c.Wargame.Server.SetMode(mode)
+	c.Session.InteractionRespond(c.Interaction.Interaction, &discordgo.InteractionResponse{
+		Type: discordgo.InteractionResponseChannelMessageWithSource,
+		Data: &discordgo.InteractionResponseData{
+			Embeds: []*discordgo.MessageEmbed{
+				{
+					Title:       "Modes",
+					Description: fmt.Sprintf("Mode set too %s", mode.Name),
+				},
+			},
+		},
+	})
 }
 
-// Handles the mode command
+// Sets the mode of the server
+func SetModeHandler(c Context) {
+	data := c.Interaction.Interaction.MessageComponentData()
+	if len(data.Values) < 1 {
+		SomethingWentWrong(c, "The selected mode did not contain a key")
+	}
+
+	var mode wargame.Mode
+
+	for _, m := range c.Wargame.GameModes {
+		if m.Name == data.Values[0] {
+			mode = m
+			break
+		}
+	}
+
+	c.Wargame.Server.SetMode(&mode)
+	log.Printf("[Discord] %s set mode too %s", c.User.GlobalName, mode.Name)
+	c.Session.InteractionRespond(c.Interaction.Interaction, &discordgo.InteractionResponse{
+		Type: discordgo.InteractionResponseChannelMessageWithSource,
+		Data: &discordgo.InteractionResponseData{
+			Content: fmt.Sprintf("Mode set too %s", mode.Name),
+		},
+	})
+}
+
+// Handles the map command
 func MapHandler(c Context) {
+	log.Println("[Discord] Map Command")
 	options := c.Interaction.Interaction.ApplicationCommandData().Options
 	if options == nil {
 		SomethingWentWrong(c, "Handler Options is nil")
@@ -135,7 +244,24 @@ func MapHandler(c Context) {
 }
 
 func listMap(c Context) {
-	SomethingWentWrong(c, "")
+	var content = "Available maps for this mode:\n"
+
+	for _, m := range c.Wargame.Server.Mode.MapList {
+		//TODO embed image link to see the map
+		content += fmt.Sprintf("- %s (%vv%v)\n", m.Name, m.Type, m.Type)
+	}
+	c.Session.InteractionRespond(c.Interaction.Interaction, &discordgo.InteractionResponse{
+		Type: discordgo.InteractionResponseChannelMessageWithSource,
+		Data: &discordgo.InteractionResponseData{
+			Embeds: []*discordgo.MessageEmbed{
+				{
+					Title:       "Maps",
+					Description: content,
+				},
+			},
+			Flags: discordgo.MessageFlagsEphemeral,
+		},
+	})
 }
 
 func setMap(c Context) {
