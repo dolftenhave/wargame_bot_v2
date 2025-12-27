@@ -95,7 +95,7 @@ func (handler BotInteractionHandler) Find(name string) (*Interaction, bool) {
 }
 
 // Register a new interaction
-func (handler BotInteractionHandler) Register(name string, interaction Interaction, help string) {
+func (handler *BotInteractionHandler) Register(name string, interaction Interaction, help string) {
 	botInteractionStruct := new(BotInteraction)
 	botInteractionStruct.interaction = interaction
 	botInteractionStruct.help = help

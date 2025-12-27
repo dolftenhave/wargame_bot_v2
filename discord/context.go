@@ -24,6 +24,7 @@ type (
 func NewContext(session *discordgo.Session, interaction *discordgo.InteractionCreate, guild *discordgo.Guild, channel *discordgo.Channel, user *discordgo.User, wargame *wargame.Wargame) *Context {
 	context := new(Context)
 
+	context.Session = session
 	context.Interaction = interaction
 	context.Guild = guild
 	context.Channel = channel
