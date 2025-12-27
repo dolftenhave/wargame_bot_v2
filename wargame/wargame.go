@@ -28,6 +28,8 @@ func NewWargame(modeDataPath string, mapDataPath string, rconConfig RconConfig) 
 		return nil, err
 	}
 
+	wargame.Server.RconConfig = rconConfig
+
 	for _, mode := range wargame.GameModes {
 		wargame.Server.Mode = &mode
 		break

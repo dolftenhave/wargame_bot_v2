@@ -32,9 +32,9 @@ func interactionHandler(s *discordgo.Session, i *discordgo.InteractionCreate) {
 
 	switch i.Type {
 	case discordgo.InteractionApplicationCommand:
-		sender = i.ID
+		sender = i.ApplicationCommandData().Name
 	case discordgo.InteractionMessageComponent:
-		sender = i.Message.Author.GlobalName
+		sender = i.MessageComponentData().CustomID
 	default:
 		log.Println("[Interaction] Wrong type")
 		return
@@ -60,7 +60,6 @@ func interactionHandler(s *discordgo.Session, i *discordgo.InteractionCreate) {
 
 	log.Printf("[D-Interaction] Token: %s, Name: %s", i.Token, sender)
 
-	sender = i.ApplicationCommandData().Name
 	interaction, found := handler.Find(sender)
 	if found != true {
 		CommandNotImplemented(s, i)

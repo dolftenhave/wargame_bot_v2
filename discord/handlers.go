@@ -130,17 +130,15 @@ func setModes(c Context) {
 		var mo []discordgo.SelectMenuOption
 
 		for _, m := range c.Wargame.GameModes {
-			var label string
+			var def = false
 			if m.Name == c.Wargame.Server.Mode.Name {
-				label = fmt.Sprintf("**%s**", m.Name)
-			} else {
-				label = m.Name
-			}
+				def = true
+			} 			
 			mo = append(mo, discordgo.SelectMenuOption{
-				Label:       label,
+				Label:       m.Name,
 				Value:       m.Name,
 				Description: "",
-				Default:     false,
+				Default:     def,
 			})
 		}
 
@@ -197,7 +195,7 @@ func setModes(c Context) {
 
 // Sets the mode of the server
 func SetModeHandler(c Context) {
-	data := c.Interaction.Interaction.MessageComponentData()
+	data := c.Interaction.MessageComponentData()
 	if len(data.Values) < 1 {
 		SomethingWentWrong(c, "The selected mode did not contain a key")
 	}
@@ -211,14 +209,49 @@ func SetModeHandler(c Context) {
 		}
 	}
 
-	c.Wargame.Server.SetMode(&mode)
-	log.Printf("[Discord] %s set mode too %s", c.User.GlobalName, mode.Name)
+	// Delete the modal
 	c.Session.InteractionRespond(c.Interaction.Interaction, &discordgo.InteractionResponse{
-		Type: discordgo.InteractionResponseChannelMessageWithSource,
+		Type: discordgo.InteractionResponseUpdateMessage,
 		Data: &discordgo.InteractionResponseData{
-			Content: fmt.Sprintf("Mode set too %s", mode.Name),
+			Content:    fmt.Sprintf("You selected *%s*\nPlease wait while the setting are sent to the server...", mode.Name),
+			Components: []discordgo.MessageComponent{},
 		},
 	})
+
+	// ack the message
+	c.Session.InteractionRespond(c.Interaction.Interaction, &discordgo.InteractionResponse{
+		Type: discordgo.InteractionResponseDeferredMessageUpdate,
+		Data: &discordgo.InteractionResponseData{
+			Flags: discordgo.MessageFlagsEphemeral,
+		},
+	})
+
+
+	err := c.Wargame.Server.SetMode(&mode)
+	if err != nil {
+		log.Printf("[Discord] Error setting mode.\n%s", err.Error())
+		SomethingWentWrong(c, "Error setting the mode, please check the logs")
+		return
+	}
+
+	c.Wargame.Server.Mode = &mode
+
+	var confirm = "Done!"
+	_, err = c.Session.InteractionResponseEdit(c.Interaction.Interaction, &discordgo.WebhookEdit{
+		Content: &confirm,
+	})
+
+	log.Printf("[Discord] %s set mode to %s", c.User.GlobalName, mode.Name)
+	if err != nil {
+		log.Printf("[Discord] Error: Failed to delete Set Mode Interaction.\n%s", err.Error())
+	}
+
+	_, err = c.Session.FollowupMessageCreate(c.Interaction.Interaction, false, &discordgo.WebhookParams{
+		Content: fmt.Sprintf("<@%s> set the mode to %s", c.User.ID, mode.Name),
+	})
+	if err != nil {
+		log.Printf("[Discord] Error: Setting mode\n%s", err.Error())
+	}
 }
 
 // Handles the map command

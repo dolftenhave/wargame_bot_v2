@@ -9,11 +9,11 @@ import (
 )
 
 var GameModes = map[int]string{
-	1:"Destruction",
-	2:"Siege",
-	3:"Economy",
-	4:"Conquest",
-	5:"BreakThroughConquest",
+	1: "Destruction",
+	2: "Siege",
+	3: "Economy",
+	4: "Conquest",
+	5: "BreakThroughConquest",
 }
 
 type (
@@ -27,10 +27,11 @@ type (
 
 	// A struct that holds data about the current state of the server.
 	Server struct {
-		Conn    rcon.Conn   // The rcon connection to the server.
-		State   ServerState // The current state of the server.
-		Mode    *Mode       // The current mode of the server.
-		Players []Player    // The players currently connected.
+		Conn       rcon.Conn // The rcon connection to the server.
+		RconConfig RconConfig
+		State      ServerState // The current state of the server.
+		Mode       *Mode       // The current mode of the server.
+		Players    []Player    // The players currently connected.
 	}
 )
 
@@ -56,7 +57,7 @@ func (s *Server) CreateConn(conf *RconConfig) error {
 		return err
 	}
 	log.Println("[Server] Connection Created.")
-	conn.Close()
+	defer conn.Close()
 
 	s.Conn = *conn
 	return nil
@@ -64,6 +65,7 @@ func (s *Server) CreateConn(conf *RconConfig) error {
 
 func (s *Server) execCommand(command string, wg *sync.WaitGroup) {
 	defer wg.Done()
+
 	s.LogOutgoint(command)
 	ack, err := s.Conn.Execute(command)
 	if err != nil {
@@ -75,15 +77,40 @@ func (s *Server) execCommand(command string, wg *sync.WaitGroup) {
 }
 
 // Executes a group of commands
-func (s *Server) Send(commands []string) {
-	var wg sync.WaitGroup
-
-	defer wg.Done()
-	for _, c := range commands {
-		wg.Add(1)
-		go s.execCommand(c, &wg)
+func (s *Server) Send(commands []string) error {
+	conn, err := rcon.Dial(fmt.Sprintf("%s:%s", s.RconConfig.Ip, s.RconConfig.Port), s.RconConfig.Pword)
+	if err != nil {
+		log.Printf("[RCON] err: %s", err.Error())
 	}
-	wg.Wait()
+	s.Conn = *conn
+
+	/*	Cant run this fast over tcp.
+		var wg sync.WaitGroup
+
+		for _, c := range commands {
+			wg.Add(1)
+			go s.execCommand(c, &wg)
+			time.Sleep(20 * time.Millisecond)
+		}
+
+		wg.Wait()
+	*/
+
+	for _, c := range commands {
+		log.Printf("[RCON] Sending: %s", c)
+		ack, err := s.Conn.Execute(c)
+		if err != nil {
+			break
+		}
+		log.Printf("[RCON] ACK: %s", ack)
+	}
+
+	conn.Close()
+
+	if err != nil {
+		return err
+	}
+	return nil
 }
 
 // Sets the mode of the server
@@ -97,7 +124,7 @@ func (s *Server) SetMode(mode *Mode) error {
 	commands = append(commands, s.setName(mode.Name))
 	commands = append(commands, s.setMap(m))
 	commands = append(commands, s.setNumPlayers(mode.TeamSize*2))
-	commands = append(commands, s.setStartingPoints(mode.StartingPoints*mode.TeamSize))
+	commands = append(commands, s.setStartingPoints(mode.StartingPoints))
 	commands = append(commands, s.setTimeLimit(mode.TimeLimit))
 	commands = append(commands, s.setIncomeRate(mode.Income))
 	commands = append(commands, s.setGameMode(mode.GameMode))
@@ -116,7 +143,11 @@ func (s *Server) SetMode(mode *Mode) error {
 	commands = append(commands, s.setDebriefTime(mode.DebriefTime))
 	commands = append(commands, s.setLoadingTime(mode.LoadingTime))
 
-	s.Send(commands)
+	err := s.Send(commands)
+
+	if err != nil{
+		return err
+	}
 
 	s.Mode = mode
 
