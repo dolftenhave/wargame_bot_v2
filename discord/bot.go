@@ -58,15 +58,15 @@ func StartBot(conf BotConfig, wargameData *wargame.Wargame) (*discordgo.Session,
 	}
 
 	w = wargameData
-    err = registerCommands(session)
-	if err != nil {
-		return nil, err
-	}
+	//err = registerCommands(session)
+	//if err != nil {
+	//		return nil, err
+	//	}
 
 	handler = NewInteractionHandler()
 	registerHandlers()
 	session.AddHandler(interactionHandler)
-	session.AddHandler(messageReciever)
+	//session.AddHandler(messageReciever)
 
 	if err != nil {
 		return nil, err
@@ -76,21 +76,13 @@ func StartBot(conf BotConfig, wargameData *wargame.Wargame) (*discordgo.Session,
 
 func registerCommands(s *discordgo.Session) error {
 	// Manually listing out commands since there are only a few
-	commands := make([]*discordgo.ApplicationCommand, 5)
-	commands = append(commands, HelpCommand())
-	commands = append(commands, DeckCommand())
-	commands = append(commands, ModeCommand())
-	commands = append(commands, MapCommand())
 
 	log.Println("[Discord] Regisetring slash commands")
-	// Registering the commands with discord.
-	for _, c := range commands {
-		_, err := s.ApplicationCommandCreate(APP_ID, GUILD_ID, c)
-		if err != nil {
-			return err
-		}
-	}
 
+	s.ApplicationCommandCreate(APP_ID, GUILD_ID, MapCommand())
+	s.ApplicationCommandCreate(APP_ID, GUILD_ID, ModeCommand())
+	s.ApplicationCommandCreate(APP_ID, GUILD_ID, DeckCommand())
+	s.ApplicationCommandEdit(APP_ID, GUILD_ID, "1451051630588858472", HelpCommand())
 	return nil
 }
 

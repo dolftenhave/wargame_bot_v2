@@ -57,9 +57,11 @@ func interactionHandler(s *discordgo.Session, i *discordgo.InteractionCreate) {
 
 	log.Printf("[D-Interaction] Token: %s, Name: %s", i.Token, sender)
 
+	sender = i.ApplicationCommandData().Name
 	interaction, found := handler.Find(sender)
 	if found != true {
-		log.Println("[D-Interaction] No handler found")
+		CommandNotImplemented(s, i)
+		log.Printf("[D-Interaction] No handler for %s found", sender)
 		return
 	}
 
@@ -68,6 +70,17 @@ func interactionHandler(s *discordgo.Session, i *discordgo.InteractionCreate) {
 
 	c := *interaction
 	c(*context)
+}
+
+// Sends back a message notifying the sender that the command has not been implemented yet
+func CommandNotImplemented(s *discordgo.Session, i *discordgo.InteractionCreate) {
+	s.InteractionRespond(i.Interaction, &discordgo.InteractionResponse{
+		Type: discordgo.InteractionResponseChannelMessageWithSource,
+		Data: &discordgo.InteractionResponseData{
+			Content: "Sorry, this command has not yet been implemented.",
+			Flags: discordgo.MessageFlagsEphemeral,
+		},
+	})
 }
 
 func NewInteractionHandler() *BotInteractionHandler {

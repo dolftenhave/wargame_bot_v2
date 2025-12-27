@@ -13,14 +13,10 @@ func HelpCommand() *discordgo.ApplicationCommand {
 		Description: "Lists all commands and what they do",
 		Options: []*discordgo.ApplicationCommandOption{
 			{
-				Name:        "setdeck",
-				Type:        discordgo.ApplicationCommandOptionType(discordgo.ChatApplicationCommand),
-				Description: "Sets your deck",
-			},
-			{
-				Name:        "help",
-				Type:        discordgo.ApplicationCommandOptionType(discordgo.ChatApplicationCommand),
-				Description: "Lists all commands and what they do",
+				Name:        "command",
+				Description: "The command you want help for.",
+				Type:        discordgo.ApplicationCommandOptionString,
+				Required:    false,
 			},
 		},
 	}
