@@ -35,5 +35,5 @@ func NewContext(session *discordgo.Session, interaction *discordgo.InteractionCr
 
 // Logs the recieved request.
 func (c Context) LogRecieved() {
-	log.Printf("[Discord] %s:%s\n", c.Guild, c.User)
+	log.Printf("[Discord] Guild:%s, User:%s\n", c.Guild.Name, c.User)
 }

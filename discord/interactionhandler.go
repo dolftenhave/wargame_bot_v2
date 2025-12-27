@@ -47,6 +47,7 @@ func interactionHandler(s *discordgo.Session, i *discordgo.InteractionCreate) {
 	guild, err := s.State.Guild(channel.GuildID)
 	if err != nil {
 		log.Println("[Discord] Failed to get guildID")
+		return
 	}
 
 	if i.User == nil {
