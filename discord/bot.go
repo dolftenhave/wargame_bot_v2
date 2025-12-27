@@ -124,4 +124,6 @@ func AdvertiseCapabilites(s *discordgo.Session) error {
 // Registers a list of interactions that will be used by the interaction handler.
 func registerHandlers() {
 	handler.Register("help", HelpHandler, "This lists all the available commands.")
+	handler.Register("mode", ModeHandler, "Lets you set or change the game mode.")
+	handler.Register("map", MapHandler, "Map stuff")
 }

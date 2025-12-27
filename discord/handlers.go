@@ -2,18 +2,25 @@
 
 package discord
 
-import "github.com/bwmarrin/discordgo"
+import (
+	"fmt"
 
-type Option struct {
-	Name        string
-	Description string
-	Required    bool
-}
+	"github.com/bwmarrin/discordgo"
+)
 
-type CommandsHelp struct {
-	Name        string
-	Description string
-	Options     []Option
+// Send an error message to discord.
+func SomethingWentWrong(c Context, message string) {
+	content := "Oh no, something went wrong."
+	if message != "" {
+		content += fmt.Sprintf("\nMessage: ", message)
+	}
+	c.Session.InteractionRespond(c.Interaction.Interaction, &discordgo.InteractionResponse{
+		Type: discordgo.InteractionResponseChannelMessageWithSource,
+		Data: &discordgo.InteractionResponseData{
+			Content: content,
+			Flags:   discordgo.MessageFlagsEphemeral,
+		},
+	})
 }
 
 // Handles interactions with the help command.
@@ -53,5 +60,92 @@ func HelpHandler(c Context) {
 
 // Handles the mode command
 func ModeHandler(c Context) {
+	options := c.Interaction.Interaction.ApplicationCommandData().Options
+	if options == nil {
+		SomethingWentWrong(c, "Handler Options is nil")
+		return
+	}
+	switch options[0].Name {
+	case "list":
+		listModes(c)
+	case "set":
+		setModes(c)
+	default:
+		SomethingWentWrong(c, fmt.Sprintf("Mode option '%s' is not yet implemented", options[0].Name))
+	}
+}
 
+// Sends the user a list of available modes in text format.
+func listModes(c Context) {
+	var fields = make([]*discordgo.MessageEmbedField, len(c.Wargame.GameModes))
+	for i, mode := range c.Wargame.GameModes {
+		var name string
+		if mode.Name == c.Wargame.Server.Mode.Name {
+			name = fmt.Sprintf("__[x] - %s__", mode.Name)
+		} else {
+			name = fmt.Sprintf("[ ] - %s", mode.Name)
+		}
+
+		field := &discordgo.MessageEmbedField{
+			Name:   name,
+			Value:  fmt.Sprintf("Team Size: %v", mode.TeamSize),
+			Inline: false,
+		}
+		fields[i] = field
+	}
+	c.Session.InteractionRespond(c.Interaction.Interaction, &discordgo.InteractionResponse{
+		Type: discordgo.InteractionResponseChannelMessageWithSource,
+		Data: &discordgo.InteractionResponseData{
+			Embeds: []*discordgo.MessageEmbed{
+				{
+					Title:       "Modes",
+					Description: "Here is a list of available modes.",
+					Fields:      fields,
+				},
+			},
+			Flags: discordgo.MessageFlagsEphemeral,
+		},
+	})
+}
+
+// Lets you set the current game mode.
+func setModes(c Context) {
+	CommandNotImplemented(c.Session, c.Interaction)
+}
+
+// Handles the mode command
+func MapHandler(c Context) {
+	options := c.Interaction.Interaction.ApplicationCommandData().Options
+	if options == nil {
+		SomethingWentWrong(c, "Handler Options is nil")
+		return
+	}
+	switch options[0].Name {
+	case "list":
+		listMap(c)
+	case "set":
+		setMap(c)
+	case "vote":
+		voteMap(c)
+	case "random":
+		randomMap(c)
+	default:
+		SomethingWentWrong(c, fmt.Sprintf("Mode option '%s' is not yet implemented", options[0].Name))
+	}
+}
+
+func listMap(c Context) {
+	SomethingWentWrong(c, "")
+}
+
+func setMap(c Context) {
+	SomethingWentWrong(c, "")
+}
+
+func voteMap(c Context) {
+	SomethingWentWrong(c, "")
+}
+
+func randomMap(c Context) {
+	SomethingWentWrong(c, "")
 }
