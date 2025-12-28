@@ -1,5 +1,40 @@
 [
   {
+    "name": "[+20%][Tactical] Happy New Year",
+    "maps": [
+      12,
+	  1,
+      2,
+      3,
+	  5,
+      6,
+	  7,
+	  10,
+	  14,
+	  17,
+	  19,
+	  20,
+	  22,
+	  29
+    ],
+    "teamSize": 10,
+    "startingPoints": 5500,
+    "timeLimit": 3000,
+    "scoreLimit": 8000,
+    "income": 4,
+    "gameMode": 1,
+    "oposition": 0,
+    "nations": -1,
+    "era": -1,
+    "theme": -1,
+    "autoStart": true,
+    "minPlayers": 19,
+    "warmupTime": 15,
+    "deployTime": 180,
+    "debriefTime": 60,
+    "loadingTime": 120
+  },
+  {
     "name": "2v2 Tourney Server",
     "maps": [
       1,
@@ -22,30 +57,5 @@
     "deployTime": 180,
     "debriefTime": 45,
     "loadingTime": 280
-  },
-  {
-    "name": "[+20%][Tactical] Happy New Year",
-    "maps": [
-      5,
-      4,
-      6,
-      8
-    ],
-    "teamSize": 10,
-    "startingPoints": 5500,
-    "timeLimit": 3000,
-    "scoreLimit": 8000,
-    "income": 4,
-    "gameMode": 1,
-    "oposition": 0,
-    "nations": -1,
-    "era": -1,
-    "theme": -1,
-    "autoStart": true,
-    "minPlayers": 19,
-    "warmupTime": 15,
-    "deployTime": 180,
-    "debriefTime": 60,
-    "loadingTime": 120
   }
 ]

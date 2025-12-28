@@ -20,6 +20,7 @@ type (
 		Wargame struct {
 			Modes string `yaml:"modes"`
 			Maps  string `yaml:"maps"`
+			Deck  string `yaml:"deck"`
 		} `yaml:"wargame"`
 	}
 )
@@ -57,7 +58,7 @@ func main() {
 		log.Fatalf("Error loading the the main conf.yaml.\n%s", err.Error())
 	}
 
-	wargameData, err = wargame.NewWargame(conf.Wargame.Modes, conf.Wargame.Maps, conf.Rcon)
+	wargameData, err = wargame.NewWargame(conf.Wargame.Modes, conf.Wargame.Maps, conf.Rcon, conf.Wargame.Deck)
 	if err != nil {
 		log.Fatalf("Error: %s\n", err.Error())
 	}

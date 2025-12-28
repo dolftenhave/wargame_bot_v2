@@ -1,8 +1,10 @@
 package discord
 
 import (
-	"github.com/bwmarrin/discordgo"
 	"log"
+	"strings"
+
+	"github.com/bwmarrin/discordgo"
 )
 
 type (
@@ -35,6 +37,10 @@ func interactionHandler(s *discordgo.Session, i *discordgo.InteractionCreate) {
 		sender = i.ApplicationCommandData().Name
 	case discordgo.InteractionMessageComponent:
 		sender = i.MessageComponentData().CustomID
+	case discordgo.InteractionModalSubmit:
+		data := i.ModalSubmitData()
+		split := strings.Split(data.CustomID, ":")
+		sender = split[0]
 	default:
 		log.Println("[Interaction] Wrong type")
 		return

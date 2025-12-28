@@ -1,0 +1,272 @@
+{
+  "nations": {
+    "12": {
+      "name": "USA",
+      "code": "USA",
+	  "discord_id":"1450254547296583721",
+      "icon": "usa.png"
+    },
+    "44": {
+      "name": "United Kingdom",
+      "code": "UK",
+	  "discord_id":"1450254486042836993",
+      "icon": "uk.png"
+    },
+    "76": {
+      "name": "France",
+      "code": "FRA",
+	  "discord_id":"1450253714517524684",
+      "icon": "fra. png"
+    },
+    "108": {
+      "name": "West Germany",
+      "code": "RFA",
+	  "discord_id":"1450254330753060936",
+      "icon": "rfa.png"
+    },
+    "140": {
+      "name": "Canada",
+      "code": "CAN",
+	  "discord_id":"1450253431775170791",
+      "icon": "can.png"
+    },
+    "172": {
+      "name": "Denmark",
+      "code": "DAN",
+	  "discord_id":"1450253614227652729",
+      "icon": "dan.png"
+    },
+    "204": {
+      "name": "Sweden",
+      "code": "SWE",
+	  "discord_id":"1450254461791502466",
+      "icon": "swe.png"
+    },
+    "236": {
+      "name": "Norway",
+      "code": "NOR",
+	  "discord_id":"1450254092827103374",
+      "icon": "nor.png"
+    },
+    "268": {
+      "name": "ANZAC",
+      "code": "ANZ",
+	  "discord_id":"1450253339454607463",
+      "icon": "anz.png"
+    },
+    "300": {
+      "name": "Japan",
+      "code": "JAP",
+	  "discord_id":"1450253823183421595",
+      "icon": "jap.png"
+    },
+    "332": {
+      "name": "South Korea",
+      "code": "ROK",
+	  "discord_id":"1450254356606881836",
+      "icon": "rok.png"
+    },
+    "364": {
+      "name": "Netherlands",
+      "code": "HOL",
+	  "discord_id":"1450253740287463505",
+      "icon": "hol.png"
+    },
+    "396": {
+      "name": "Israel",
+      "code": "ISR",
+	  "discord_id":"1450253767634325696",
+      "icon": "isr.png"
+    },
+    "480": {
+      "name": "Eurocorps",
+      "code": "EURO",
+	  "discord_id":"1450253641872048280",
+      "icon": "euro.png"
+    },
+    "481": {
+      "name": "Scandinavia",
+      "code": "SCAND",
+	  "discord_id":"1450254407923929148",
+      "icon": "scand.png"
+    },
+    "482": {
+      "name": "Commonwealth",
+      "code": "CMW",
+	  "discord_id":"1450253559000989867",
+      "icon": "cmw.png"
+    },
+    "483": {
+      "name": "Blue Dragons",
+      "code": "BLUEDRAGONS",
+	  "discord_id":"1450253401081512007",
+      "icon": "bluedragons.png"
+    },
+    "486": {
+      "name": "Landjut",
+      "code": "LAND",
+	  "discord_id":"1450253845145059485",
+      "icon": "land.png"
+    },
+    "488": {
+      "name": "NORAD",
+      "code": "NORAD",
+	  "discord_id":"1450254125420777642",
+      "icon": "norad. png"
+    },
+    "492": {
+      "name": "OTAN",
+      "code": "OTAN",
+	  "discord_id":"1450253940678721707",
+      "icon": "otan.png"
+    },
+    "524": {
+      "name": "Italy",
+      "code": "ITA",
+	  "discord_id":"1450253797463953508",
+      "icon": "ita.png"
+    },
+    "1036": {
+      "name": "East Germany",
+      "code": "RDA",
+	  "discord_id":"1450254262855663778",
+      "icon": "rda.png"
+    },
+    "1068": {
+      "name": "Soviet Union",
+      "code": "URSS",
+	  "discord_id":"1450254508616712244",
+      "icon": "urss.png"
+    },
+    "1100": {
+      "name": "Poland",
+      "code": "POL",
+	  "discord_id":"1450254236037414994",
+      "icon": "pol.png"
+    },
+    "1132": {
+      "name": "Czechoslovakia",
+      "code": "CZ",
+	  "discord_id":"1450253585328640192",
+      "icon": "cz.png"
+    },
+    "1164": {
+      "name": "China",
+      "code": "CHI",
+	  "discord_id":"1450253535290593310",
+      "icon": "chi.png"
+    },
+    "1196": {
+      "name": "North Korea",
+      "code": "NK",
+	  "discord_id":"1450253998753054750",
+      "icon": "nk.png"
+    },
+    "1228": {
+      "name": "Finland",
+      "code": "FIN",
+	  "discord_id":"1450253665247170773",
+      "icon": "fin.png"
+    },
+    "1260": {
+      "name": "Yugoslavia",
+      "code": "YUG",
+	  "discord_id":"1450254575268528128",
+      "icon": "yug.png"
+    },
+    "1316": {
+      "name": "Red Dragons",
+      "code": "REDDRAGONS",
+	  "discord_id":"1450254304454643773",
+      "icon": "reddragons.png"
+    },
+    "1317": {
+      "name": "Eastern Block",
+      "code": "NSWP",
+	  "discord_id":"1450254156076941508",
+      "icon": "nswp.png"
+    },
+    "1322": {
+      "name": "Finland + Poland",
+      "code": "FINPOL",
+	  "discord_id":"1450253688919556148",
+      "icon": "finpol.png"
+    },
+    "1323": {
+      "name": "Entente",
+      "code": "YUGVAK",
+	  "discord_id":"1450254604456693771",
+      "icon": "yugvac.png"
+    },
+    "1324": {
+      "name": "REDFOR",
+      "code": "REDFOR",
+	  "discord_id":"1450254206098473022",
+      "icon": "Redfor.png"
+    }
+  },
+  "specializations": {
+    "0": {
+      "name": "Motorized",
+	  "code": "Motorized",
+	  "discord_id":"1450253912337551552",
+      "icon": "Motorized.png"
+    },
+    "1": {
+      "name": "Armored",
+	  "code": "Armored",
+	  "discord_id":"1450253364389744861",
+      "icon": "Armored.png"
+    },
+    "2": {
+      "name": "Support",
+	  "code": "Support",
+	  "discord_id":"1450254433291075594",
+      "icon": "Support.png"
+    },
+    "3": {
+      "name": "Marine",
+	  "code": "Marine",
+	  "discord_id":"1450253873762664612",
+      "icon": "Marine.png"
+    },
+    "4": {
+      "name": "Mechanized",
+	  "code": "Mechanized",
+	  "discord_id":"1450253893991923732",
+      "icon": "Mechanized.png"
+    },
+    "5": {
+      "name": "Airborne",
+	  "code": "Airborne",
+	  "discord_id":"1450253222684917891",
+      "icon": "Airborne.png"
+    },
+    "6": {
+      "name": "Naval",
+	  "code": "Naval",
+	  "discord_id":"1450253970168746114",
+      "icon": "Naval.png"
+    }
+  },
+  "eras": {
+    "0": {
+      "name": "Category C",
+	  "code": "CatC",
+	  "discord_id":"1450253507658518600",
+      "icon": "CatC.png"
+    },
+    "2": {
+      "name": "Category B",
+	  "code": "CatB",
+	  "discord_id":"1450253482803069033",
+      "icon": "CatB.png"
+    },
+    "1": {
+      "name": "Category A",
+	  "code": "CatA",
+	  "discord_id":"1450253455888220341",
+      "icon": "CatA.png"
+    }
+  }
+}

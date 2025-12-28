@@ -9,7 +9,6 @@ type (
 	Player struct {
 		Name string
 		ID   string
-		Deck Deck
 	}
 
 	PlayerList map[string]Player

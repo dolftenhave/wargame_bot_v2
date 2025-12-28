@@ -12,7 +12,7 @@ var GameModes = map[int]string{
 	1: "Destruction",
 	2: "Siege",
 	3: "Economy",
-	4: "Conquest",
+	4: "Conquete",
 	5: "BreakThroughConquest",
 }
 
@@ -145,7 +145,7 @@ func (s *Server) SetMode(mode *Mode) error {
 
 	err := s.Send(commands)
 
-	if err != nil{
+	if err != nil {
 		return err
 	}
 
@@ -155,9 +155,11 @@ func (s *Server) SetMode(mode *Mode) error {
 }
 
 // Sets the map to the current map
-func (s *Server) SetMap(m string) error {
-
-	return nil
+func (s *Server) SetMap(m Map) error {
+	var commands []string
+	commands = append(commands, s.setMap(fmt.Sprintf("%s%s", GameModes[s.Mode.GameMode], m.Code)))
+	err := s.Send(commands)
+	return err
 }
 
 // Kick a player from the server using their player id or name.
@@ -277,7 +279,35 @@ func (s *Server) cancelLaunch() string {
 func (s *Server) getPlayers() string {
 	return "display_all_clients"
 }
+func (s *Server) GetPlayers() string {
+	conn, err := rcon.Dial(fmt.Sprintf("%s:%s", s.RconConfig.Ip, s.RconConfig.Port), s.RconConfig.Pword)
+	if err != nil {
+		log.Printf("[RCON] err: %s", err.Error())
+	}
+	s.Conn = *conn
+
+	ack, err := s.Conn.Execute(s.getPlayers())
+
+	conn.Close()
+
+	return ack
+}
 
 func (s *Server) setDeckCode(playerID string, deckCode string) string {
 	return fmt.Sprintf("setpvar %s PlayerDeckContent %s", playerID, deckCode)
+}
+
+func (s *Server) SetDeckCode(playerID string, deckCode string) string {
+
+	conn, err := rcon.Dial(fmt.Sprintf("%s:%s", s.RconConfig.Ip, s.RconConfig.Port), s.RconConfig.Pword)
+	if err != nil {
+		log.Printf("[RCON] err: %s", err.Error())
+	}
+	s.Conn = *conn
+
+	ack, err := s.Conn.Execute(s.setDeckCode(playerID, deckCode))
+
+	conn.Close()
+
+	return ack
 }

@@ -3,14 +3,15 @@ package wargame
 type (
 	// A collection of components used for wargame.
 	Wargame struct {
-		GameModes ModeList
-		Maps      MapList
-		Server    Server
+		GameModes    ModeList
+		Maps         MapList
+		Server       Server
+		DeckCodeData DeckCodeData
 	}
 )
 
 // Initialises a new wargame variable.
-func NewWargame(modeDataPath string, mapDataPath string, rconConfig RconConfig) (*Wargame, error) {
+func NewWargame(modeDataPath string, mapDataPath string, rconConfig RconConfig, deckDataPath string) (*Wargame, error) {
 	var wargame = new(Wargame)
 
 	err := wargame.Maps.ReadConfig(mapDataPath)
@@ -19,6 +20,11 @@ func NewWargame(modeDataPath string, mapDataPath string, rconConfig RconConfig) 
 	}
 
 	err = wargame.GameModes.ReadConfig(modeDataPath, &wargame.Maps)
+	if err != nil {
+		return nil, err
+	}
+
+	err = wargame.DeckCodeData.ReadConfig(deckDataPath)
 	if err != nil {
 		return nil, err
 	}
@@ -34,5 +40,11 @@ func NewWargame(modeDataPath string, mapDataPath string, rconConfig RconConfig) 
 		wargame.Server.Mode = &mode
 		break
 	}
+
+	err = wargame.Server.SetMode(wargame.Server.Mode)
+	if err != nil {
+		return nil, err
+	}
+
 	return wargame, nil
 }

@@ -127,4 +127,8 @@ func registerHandlers() {
 	handler.Register("mode", ModeHandler, "Lets you set or change the game mode.")
 	handler.Register("map", MapHandler, "Map stuff")
 	handler.Register("select_mode", SetModeHandler, "Sets the mode")
+	handler.Register("select_map", SelectMapHandler, "Sets the mode")
+	handler.Register("deck", DeckHandler, "Deck stuff")
+	handler.Register("set_deck", SetDeck, "Set a palyers deck")
+	handler.Register("deck_code_modal", SetDeckCode, "Sets the deck code")
 }
