@@ -16,7 +16,25 @@ func HelpCommand() *discordgo.ApplicationCommand {
 				Name:        "command",
 				Description: "The command you want help for.",
 				Type:        discordgo.ApplicationCommandOptionString,
-				Required:    false,
+				Choices: []*discordgo.ApplicationCommandOptionChoice{
+					{
+						Name:  "deck",
+						Value: "deck",
+					},
+					{
+						Name:  "help",
+						Value: "help",
+					},
+					{
+						Name:  "map",
+						Value: "map",
+					},
+					{
+						Name:  "mode",
+						Value: "mode",
+					},
+				},
+				Required: false,
 			},
 		},
 	}
