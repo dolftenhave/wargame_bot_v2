@@ -341,20 +341,12 @@ func SetModeHandler(c Context) {
 		}
 	}
 
-	// Delete the modal
+	// Update the modal
 	c.Session.InteractionRespond(c.Interaction.Interaction, &discordgo.InteractionResponse{
 		Type: discordgo.InteractionResponseUpdateMessage,
 		Data: &discordgo.InteractionResponseData{
 			Content:    fmt.Sprintf("You selected *%s*\nPlease wait while the setting are sent to the server...", mode.Name),
 			Components: []discordgo.MessageComponent{},
-		},
-	})
-
-	// ack the message
-	c.Session.InteractionRespond(c.Interaction.Interaction, &discordgo.InteractionResponse{
-		Type: discordgo.InteractionResponseDeferredMessageUpdate,
-		Data: &discordgo.InteractionResponseData{
-			Flags: discordgo.MessageFlagsEphemeral,
 		},
 	})
 
@@ -367,10 +359,8 @@ func SetModeHandler(c Context) {
 
 	c.Wargame.Server.Mode = &mode
 
-	var confirm = "Done!"
-	_, err = c.Session.InteractionResponseEdit(c.Interaction.Interaction, &discordgo.WebhookEdit{
-		Content: &confirm,
-	})
+	// Delete the original message
+	err = c.Session.InteractionResponseDelete(c.Interaction.Interaction)
 
 	log.Printf("[Discord] %s set mode to %s", c.User.GlobalName, mode.Name)
 	if err != nil {
@@ -378,7 +368,7 @@ func SetModeHandler(c Context) {
 	}
 
 	_, err = c.Session.FollowupMessageCreate(c.Interaction.Interaction, false, &discordgo.WebhookParams{
-		Content: fmt.Sprintf("<@%s> set the mode to %s", c.User.ID, mode.Name),
+		Content: fmt.Sprintf("<@%s> set the mode to **%s**", c.User.ID, mode.Name),
 	})
 	if err != nil {
 		log.Printf("[Discord] Error: Setting mode\n%s", err.Error())
@@ -535,14 +525,6 @@ func SelectMapHandler(c Context) {
 		},
 	})
 
-	// ack the message
-	c.Session.InteractionRespond(c.Interaction.Interaction, &discordgo.InteractionResponse{
-		Type: discordgo.InteractionResponseDeferredMessageUpdate,
-		Data: &discordgo.InteractionResponseData{
-			Flags: discordgo.MessageFlagsEphemeral,
-		},
-	})
-
 	err = c.Wargame.Server.SetMap(m)
 
 	if err != nil {
@@ -550,10 +532,7 @@ func SelectMapHandler(c Context) {
 		SomethingWentWrong(c, "Error setting the map, please check the logs")
 		return
 	}
-	var confirm = "Done!"
-	_, err = c.Session.InteractionResponseEdit(c.Interaction.Interaction, &discordgo.WebhookEdit{
-		Content: &confirm,
-	})
+	err = c.Session.InteractionResponseDelete(c.Interaction.Interaction)
 
 	log.Printf("[Discord] %s set map to %s (%vv%v)", c.User.GlobalName, m.Name, m.Type, m.Type)
 	if err != nil {
@@ -561,7 +540,7 @@ func SelectMapHandler(c Context) {
 	}
 
 	_, err = c.Session.FollowupMessageCreate(c.Interaction.Interaction, false, &discordgo.WebhookParams{
-		Content: fmt.Sprintf("<@%s> set the map to %s (%vv%v)", c.User.ID, m.Name, m.Type, m.Type),
+		Content: fmt.Sprintf("<@%s> changed the map to **%s (%vv%v)**", c.User.ID, m.Name, m.Type, m.Type),
 	})
 	if err != nil {
 		log.Printf("[Discord] Error: Setting map\n%s", err.Error())
