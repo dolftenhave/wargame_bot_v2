@@ -684,7 +684,7 @@ func setDeck(c Context) {
 	}
 
 	if len(list) < 1 {
-		content := "No Players."
+		content := "There are no players on the server."
 		_, err = c.Session.InteractionResponseEdit(c.Interaction.Interaction, &discordgo.WebhookEdit{
 			Content: &content,
 		})
@@ -778,5 +778,179 @@ func decodeDeck(c Context) {
 	})
 	if err != nil {
 		SomethingWentWrong(c, err.Error())
+	}
+}
+
+func BanHandler(c Context) {
+	c.Session.InteractionRespond(c.Interaction.Interaction, &discordgo.InteractionResponse{
+		Type: discordgo.InteractionResponseDeferredChannelMessageWithSource,
+		Data: &discordgo.InteractionResponseData{
+			Flags: discordgo.MessageFlagsEphemeral,
+		},
+	})
+
+	list, err := wargame.ToPlayerList(c.Wargame.Server.GetPlayers())
+	if err != nil {
+		SomethingWentWrong(c, err.Error())
+	}
+
+	if len(list) < 1 {
+		content := "No Players."
+		_, err = c.Session.InteractionResponseEdit(c.Interaction.Interaction, &discordgo.WebhookEdit{
+			Content: &content,
+		})
+		return
+	}
+
+	var mo []discordgo.SelectMenuOption
+
+	for _, m := range list {
+		mo = append(mo, discordgo.SelectMenuOption{
+			Label:       m.Name,
+			Value:       fmt.Sprintf("%v,%s", m.ID, m.Name),
+			Description: "",
+		})
+	}
+
+	_, err = c.Session.InteractionResponseEdit(c.Interaction.Interaction, &discordgo.WebhookEdit{
+		Components: &[]discordgo.MessageComponent{
+			discordgo.ActionsRow{
+				Components: []discordgo.MessageComponent{
+					discordgo.SelectMenu{
+						CustomID:    "ban_player",
+						Placeholder: "Please choose your name...",
+						Options:     mo,
+					},
+				},
+			},
+		},
+	})
+	if err != nil {
+		SomethingWentWrong(c, err.Error())
+	}
+}
+
+func BanPlayerSelectedHandler(c Context) {
+	c.Session.InteractionRespond(c.Interaction.Interaction, &discordgo.InteractionResponse{
+		Type: discordgo.InteractionResponseDeferredChannelMessageWithSource,
+	})
+	data := c.Interaction.MessageComponentData()
+
+	if len(data.Values) < 1 {
+		SomethingWentWrong(c, "There is no player id.")
+	}
+
+	split := strings.Split(data.Values[0], ",")
+	_, err := strconv.Atoi(split[0])
+	if err != nil {
+		SomethingWentWrong(c, fmt.Sprintf("The player id `%v` is not in the correct format (int)", data.Values[0]))
+		return
+	}
+
+	playerID := split[0]
+	playerName := split[1]
+
+	c.Session.InteractionResponseDelete(c.Interaction.Interaction)
+
+	c.Session.ChannelMessageSend(c.Interaction.Interaction.ChannelID, fmt.Sprintf("<@%s> Kicked player **%s** `%s`.", c.User.ID, playerName, playerID))
+	c.Wargame.Server.Ban(playerID, 999999999)
+}
+
+func KickHandler(c Context) {
+	c.Session.InteractionRespond(c.Interaction.Interaction, &discordgo.InteractionResponse{
+		Type: discordgo.InteractionResponseDeferredChannelMessageWithSource,
+		Data: &discordgo.InteractionResponseData{
+			Flags: discordgo.MessageFlagsEphemeral,
+		},
+	})
+
+	list, err := wargame.ToPlayerList(c.Wargame.Server.GetPlayers())
+	if err != nil {
+		SomethingWentWrong(c, err.Error())
+	}
+
+	if len(list) < 1 {
+		content := "No Players."
+		_, err = c.Session.InteractionResponseEdit(c.Interaction.Interaction, &discordgo.WebhookEdit{
+			Content: &content,
+		})
+		return
+	}
+
+	var mo []discordgo.SelectMenuOption
+
+	for _, m := range list {
+		mo = append(mo, discordgo.SelectMenuOption{
+			Label:       m.Name,
+			Value:       fmt.Sprintf("%v,%s", m.ID, m.Name),
+			Description: "",
+		})
+	}
+
+	_, err = c.Session.InteractionResponseEdit(c.Interaction.Interaction, &discordgo.WebhookEdit{
+		Components: &[]discordgo.MessageComponent{
+			discordgo.ActionsRow{
+				Components: []discordgo.MessageComponent{
+					discordgo.SelectMenu{
+						CustomID:    "kick_player",
+						Placeholder: "Please choose your name...",
+						Options:     mo,
+					},
+				},
+			},
+		},
+	})
+	if err != nil {
+		SomethingWentWrong(c, err.Error())
+	}
+}
+
+func KickPlayerSelectedHandler(c Context) {
+	c.Session.InteractionRespond(c.Interaction.Interaction, &discordgo.InteractionResponse{
+		Type: discordgo.InteractionResponseDeferredMessageUpdate,
+	})
+	data := c.Interaction.MessageComponentData()
+
+	if len(data.Values) < 1 {
+		SomethingWentWrong(c, "There is no player id.")
+	}
+	split := strings.Split(data.Values[0], ",")
+	_, err := strconv.Atoi(split[0])
+	if err != nil {
+		SomethingWentWrong(c, fmt.Sprintf("The player id `%v` is not in the correct format (int)", data.Values[0]))
+		return
+	}
+	playerID := split[0]
+	playerName := split[1]
+
+	c.Session.InteractionResponseDelete(c.Interaction.Interaction)
+
+	c.Session.ChannelMessageSend(c.Interaction.Interaction.ChannelID, fmt.Sprintf("<@%s> Kicked player **%s** `%s`.", c.User.ID, playerName, playerID))
+	c.Wargame.Server.Kick(playerID)
+}
+
+func UnBanHandler(c Context) {
+	c.Session.InteractionRespond(c.Interaction.Interaction, &discordgo.InteractionResponse{
+		Type: discordgo.InteractionResponseDeferredChannelMessageWithSource,
+		Data: &discordgo.InteractionResponseData{
+			Flags: discordgo.MessageFlagsEphemeral,
+		},
+	})
+
+	options := c.Interaction.Interaction.ApplicationCommandData().Options
+	if options == nil {
+		SomethingWentWrong(c, "Handler Options is nil")
+		return
+	}
+	switch options[0].Name {
+	case "id":
+		id := options[0].IntValue()
+		c.Session.InteractionResponseDelete(c.Interaction.Interaction)
+		c.Session.ChannelMessageSend(c.Interaction.Interaction.ChannelID, fmt.Sprintf("<@%s> UnBanned player `%v`.", c.User.ID, id))
+		c.Wargame.Server.UnBan(fmt.Sprintf("%v",id))
+
+	default:
+		SomethingWentWrong(c, fmt.Sprintf("Mode option '%s' is not yet implemented", options[0].Name))
+		return
 	}
 }
