@@ -163,8 +163,24 @@ func (s *Server) SetMap(m Map) error {
 }
 
 // Kick a player from the server using their player id or name.
+func (s *Server) Kick(id string) error {
+	var commands []string
+	commands = append(commands, s.kick(id))
+	err := s.Send(commands)
+	return err
+}
+
+// Kick a player from the server using their player id or name.
 func (s *Server) kick(id string) string {
 	return fmt.Sprintf("kick %s", id)
+}
+
+// Kick a player from the server using their player id or name.
+func (s *Server) Ban(id string, hours int) error {
+	var commands []string
+	commands = append(commands, s.ban(id,hours))
+	err := s.Send(commands)
+	return err
 }
 
 // Kick a player from the server using their player id or name.
@@ -172,6 +188,13 @@ func (s *Server) ban(id string, hours int) string {
 	return fmt.Sprintf("ban %s %v", id, hours)
 }
 
+// Unban a player from the server using their player id or name.
+func (s *Server) UnBan(id string) error {
+	var commands []string
+	commands = append(commands, s.unban(id))
+	err := s.Send(commands)
+	return err
+}
 // Unban a player from the server using their player id or name.
 func (s *Server) unban(id string) string {
 	return fmt.Sprintf("unban %s", id)
