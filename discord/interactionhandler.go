@@ -28,6 +28,11 @@ func messageReciever(s *discordgo.Session, m *discordgo.MessageCreate) {
 
 // Sets up the interaction handler for an interaction.
 func interactionHandler(s *discordgo.Session, i *discordgo.InteractionCreate) {
+	if i.Interaction.ChannelID == "1445051378304028682" || i.Interaction.ChannelID == "1445529198553862165" {
+	} else {
+		return
+	}
+
 	log.Printf("[D-Interaction] Recieved: ID: %s, Type: %s", i.ID, i.Type)
 	var sender string
 	var user *discordgo.User
