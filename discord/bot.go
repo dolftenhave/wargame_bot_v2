@@ -15,6 +15,7 @@ const (
 	APP_ID        = "1445521636533997600"
 	GUILD_ID      = "1441939728760049809"
 	BOT_TESTER_ID = "1451051992758878340"
+	FEEDER_ID = "1448422059704189098"
 )
 
 var (
@@ -131,4 +132,10 @@ func registerHandlers() {
 	handler.Register("deck", DeckHandler, "Deck stuff")
 	handler.Register("set_deck", SetDeck, "Set a palyers deck")
 	handler.Register("deck_code_modal", SetDeckCode, "Sets the deck code")
+	handler.Register("kick", KickHandler, "Kick a player")
+	handler.Register("kick_player", KickPlayerSelectedHandler, "kick a player that was selected from the modal")
+	handler.Register("ban", BanHandler, "Ban a player")
+	handler.Register("ban_player", BanPlayerSelectedHandler, "ban a player that was selected from the modal")
+	handler.Register("unban", UnBanHandler, "UnBan a player")
+	
 }
