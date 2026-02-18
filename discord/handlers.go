@@ -47,85 +47,7 @@ func HelpHandler(c Context) {
 
 	log.Printf("Command ID %s", c.Interaction.ApplicationCommandData().ID)
 
-	switch options[0].Value {
-	case "deck":
-		embeds = []*discordgo.MessageEmbed{
-			{
-				Title:       "Help",
-				Description: "This lets you set or decode a deck.",
-				Color:       0xCF574A,
-				Fields: []*discordgo.MessageEmbedField{
-					{
-						Name:   "</deck set:1454259422908907784>",
-						Value:  fmt.Sprintf("Will let you set the deck of a player on the server."),
-						Inline: false,
-					},
-					{
-						Name:   "</deck decode:1454259422908907784>",
-						Value:  "Will tell you what the nation, spec and era a deck is.\n- `code`: The deck code.",
-						Inline: false,
-					},
-				},
-			},
-		}
-	case "mode":
-		embeds = []*discordgo.MessageEmbed{
-			{
-				Title:       "Help",
-				Description: "See or change the server mode.",
-				Color:       0xCF574A,
-				Fields: []*discordgo.MessageEmbedField{
-					{
-						Name:   "What is a mode?",
-						Value:  "A mode is a way for me to group similar game experiences together. e.g. Tactical 10v10, or 2v2. The name of a mode will be the name of the server.",
-						Inline: false,
-					},
-					{
-						Name:   "</mode set:1454259421273395434>",
-						Value:  "Lets you set the mode of the server to a different mode.",
-						Inline: false,
-					},
-					{
-						Name:   "</mode list:1454259421273395434>",
-						Value:  "Displays all the available modes.",
-						Inline: false,
-					},
-				},
-			},
-		}
-
-	case "map":
-		embeds = []*discordgo.MessageEmbed{
-			{
-				Title:       "Help",
-				Description: "See available maps or change them.",
-				Color:       0xCF574A,
-				Fields: []*discordgo.MessageEmbedField{
-					{
-						Name:   "</map set:1454259419851264031>",
-						Value:  "Lets you select a map from the available maps for the current mode.",
-						Inline: false,
-					},
-					{
-						Name:   "</map list:1454259419851264031>",
-						Value:  "List all the available maps for the current mode. You can click the maps name to see an image of it!",
-						Inline: false,
-					},
-					{
-						Name:   "</map random:1454259419851264031>",
-						Value:  "Randomly sets a map from the pool of available maps for the mode.",
-						Inline: false,
-					},
-					{
-						Name:   "</map vote:1454259419851264031>",
-						Value:  "**NOTE:** Not implemented yet.\nVote on a random selection of up to 5 maps.",
-						Inline: false,
-					},
-				},
-			},
-		}
-
-	case "help":
+	if len(options) < 1 {
 		embeds = []*discordgo.MessageEmbed{
 			{
 				Title:       "Help",
@@ -145,26 +67,126 @@ func HelpHandler(c Context) {
 				},
 			},
 		}
-
-	default:
-		embeds = []*discordgo.MessageEmbed{
-			{
-				Title:       "Help",
-				Description: "This bot lets you interact with the wargame server.\n\n**Important!** Please read the <#1452438914215313558> before using it.",
-				Color:       0xCF574A,
-				Fields: []*discordgo.MessageEmbedField{
-					{
-						Name:   "Help Command",
-						Value:  fmt.Sprintf("</help:1451051630588858472> - Will display this message.\n\n*Tip!* You can add the name of another command as an option to learn more about how to use it."),
-						Inline: false,
-					},
-					{
-						Name:   "Where can I use the bot?",
-						Value:  "The bot will only work in <#1445051378304028682>.",
-						Inline: false,
+	} else {
+		switch options[0].Value {
+		case "deck":
+			embeds = []*discordgo.MessageEmbed{
+				{
+					Title:       "Help",
+					Description: "This lets you set or decode a deck.",
+					Color:       0xCF574A,
+					Fields: []*discordgo.MessageEmbedField{
+						{
+							Name:   "</deck set:1454259422908907784>",
+							Value:  fmt.Sprintf("Will let you set the deck of a player on the server."),
+							Inline: false,
+						},
+						{
+							Name:   "</deck decode:1454259422908907784>",
+							Value:  "Will tell you what the nation, spec and era a deck is.\n- `code`: The deck code.",
+							Inline: false,
+						},
 					},
 				},
-			},
+			}
+		case "mode":
+			embeds = []*discordgo.MessageEmbed{
+				{
+					Title:       "Help",
+					Description: "See or change the server mode.",
+					Color:       0xCF574A,
+					Fields: []*discordgo.MessageEmbedField{
+						{
+							Name:   "What is a mode?",
+							Value:  "A mode is a way for me to group similar game experiences together. e.g. Tactical 10v10, or 2v2. The name of a mode will be the name of the server.",
+							Inline: false,
+						},
+						{
+							Name:   "</mode set:1454259421273395434>",
+							Value:  "Lets you set the mode of the server to a different mode.",
+							Inline: false,
+						},
+						{
+							Name:   "</mode list:1454259421273395434>",
+							Value:  "Displays all the available modes.",
+							Inline: false,
+						},
+					},
+				},
+			}
+
+		case "map":
+			embeds = []*discordgo.MessageEmbed{
+				{
+					Title:       "Help",
+					Description: "See available maps or change them.",
+					Color:       0xCF574A,
+					Fields: []*discordgo.MessageEmbedField{
+						{
+							Name:   "</map set:1454259419851264031>",
+							Value:  "Lets you select a map from the available maps for the current mode.",
+							Inline: false,
+						},
+						{
+							Name:   "</map list:1454259419851264031>",
+							Value:  "List all the available maps for the current mode. You can click the maps name to see an image of it!",
+							Inline: false,
+						},
+						{
+							Name:   "</map random:1454259419851264031>",
+							Value:  "Randomly sets a map from the pool of available maps for the mode.",
+							Inline: false,
+						},
+						{
+							Name:   "</map vote:1454259419851264031>",
+							Value:  "**NOTE:** Not implemented yet.\nVote on a random selection of up to 5 maps.",
+							Inline: false,
+						},
+					},
+				},
+			}
+
+		case "help":
+			embeds = []*discordgo.MessageEmbed{
+				{
+					Title:       "Help",
+					Description: "This bot lets you interact with the wargame server.\n\n**Important!** Please read the <#1452438914215313558> before using it.",
+					Color:       0xCF574A,
+					Fields: []*discordgo.MessageEmbedField{
+						{
+							Name:   "Help Command",
+							Value:  fmt.Sprintf("</help:1451051630588858472> - Will display this message.\n\n*Tip!* You can add the name of another command as an option to learn more about how to use it."),
+							Inline: false,
+						},
+						{
+							Name:   "Where can I use the bot?",
+							Value:  "The bot will only work in <#1445051378304028682>.",
+							Inline: false,
+						},
+					},
+				},
+			}
+
+		default:
+			embeds = []*discordgo.MessageEmbed{
+				{
+					Title:       "Help",
+					Description: "This bot lets you interact with the wargame server.\n\n**Important!** Please read the <#1452438914215313558> before using it.",
+					Color:       0xCF574A,
+					Fields: []*discordgo.MessageEmbedField{
+						{
+							Name:   "Help Command",
+							Value:  fmt.Sprintf("</help:1451051630588858472> - Will display this message.\n\n*Tip!* You can add the name of another command as an option to learn more about how to use it."),
+							Inline: false,
+						},
+						{
+							Name:   "Where can I use the bot?",
+							Value:  "The bot will only work in <#1445051378304028682>.",
+							Inline: false,
+						},
+					},
+				},
+			}
 		}
 	}
 
