@@ -136,3 +136,41 @@ func MapCommand() *discordgo.ApplicationCommand {
 		},
 	}
 }
+
+// Ban a player from the server.
+// ( For now just permanently)
+func Ban() *discordgo.ApplicationCommand {
+	return &discordgo.ApplicationCommand {
+		Name: "ban", 
+		Type: discordgo.ChatApplicationCommand,
+		Description:  "ban a player",
+	}
+}
+
+
+// Kick a player from the server.
+// ( For now just permanently)
+func Kick() *discordgo.ApplicationCommand {
+	return &discordgo.ApplicationCommand {
+		Name: "kick", 
+		Type: discordgo.ChatApplicationCommand,
+		Description:  "kick a player",
+	}
+}
+
+// Unban a player from the server
+func UnBan() *discordgo.ApplicationCommand {
+	return &discordgo.ApplicationCommand{
+		Name: "unban",
+		Type: discordgo.ChatApplicationCommand,
+		Description: "unban a player",
+		Options: []*discordgo.ApplicationCommandOption{
+			{
+				Name: "id",
+				Description: "Player ID",
+				Type: discordgo.ApplicationCommandOptionInteger,
+				Required: true,
+			},
+		},
+	}
+}
