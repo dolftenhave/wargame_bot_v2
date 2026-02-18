@@ -564,7 +564,7 @@ func randomMap(c Context) {
 	var i = rand.Intn(nMaps)
 	var m = c.Wargame.Server.Mode.MapList[i]
 
-	content := fmt.Sprintf("Setting map too %s (%vv%v)", m.Name, m.Type, m.Type)
+	content := fmt.Sprintf("Setting map too **%s (%vv%v)**", m.Name, m.Type, m.Type)
 	c.Session.InteractionResponseEdit(c.Interaction.Interaction, &discordgo.WebhookEdit{
 		Content: &content,
 	})
@@ -573,7 +573,7 @@ func randomMap(c Context) {
 	if err != nil {
 		content = fmt.Sprintf("There was an error setting the map... \n%s", err.Error())
 	} else {
-		content = fmt.Sprintf("<@%s> Set the map too %s (%vv%v)", c.User.ID, m.Name, m.Type, m.Type)
+		content = fmt.Sprintf("<@%s> changed the map to **%s (%vv%v)**", c.User.ID, m.Name, m.Type, m.Type)
 	}
 	c.Session.InteractionResponseEdit(c.Interaction.Interaction, &discordgo.WebhookEdit{
 		Content: &content,
