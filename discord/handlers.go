@@ -954,3 +954,31 @@ func UnBanHandler(c Context) {
 		return
 	}
 }
+
+func SayHandler(c Context) {
+	c.Session.InteractionRespond(c.Interaction.Interaction, &discordgo.InteractionResponse{
+		Type: discordgo.InteractionResponseDeferredChannelMessageWithSource,
+		Data: &discordgo.InteractionResponseData{
+			Flags: discordgo.MessageFlagsEphemeral,
+		},
+	})
+
+	options := c.Interaction.Interaction.ApplicationCommandData().Options
+	if options == nil {
+		SomethingWentWrong(c, "Handler options is nil")
+		return
+	}
+	// If there is no message.
+	if len(options) < 1 {
+		SomethingWentWrong(c, "Please add a message")
+	}
+
+	c.Wargame.Server.Say("","", options[0].StringValue())
+	c.Session.InteractionRespond(c.Interaction.Interaction, &discordgo.InteractionResponse{
+		Type: discordgo.InteractionResponseUpdateMessage,
+		Data: &discordgo.InteractionResponseData{
+			Content:    fmt.Sprintf("Sent"),
+			Components: []discordgo.MessageComponent{},
+		},
+	})
+}

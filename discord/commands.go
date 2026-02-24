@@ -174,3 +174,20 @@ func UnBan() *discordgo.ApplicationCommand {
 		},
 	}
 }
+
+// Send a message to the wargame server.
+func Say() *discordgo.ApplicationCommand {
+	return & discordgo.ApplicationCommand{
+		Name: "say",
+		Type: discordgo.ChatApplicationCommand,
+		Description: "Send a message to the server",
+		Options: []* discordgo.ApplicationCommandOption{
+			{
+				Name: "msg",
+				Description: "Your message",
+				Type: discordgo.ApplicationCommandOptionString,
+				Required: true,
+			},
+		},
+	}
+}

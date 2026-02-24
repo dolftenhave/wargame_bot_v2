@@ -67,6 +67,7 @@ func StartBot(conf BotConfig, wargameData *wargame.Wargame) (*discordgo.Session,
 	handler = NewInteractionHandler()
 	registerHandlers()
 	session.AddHandler(interactionHandler)
+	session.ApplicationCommandCreate(APP_ID, GUILD_ID, Say())
 	//session.AddHandler(messageReciever)
 
 	if err != nil {
@@ -137,5 +138,5 @@ func registerHandlers() {
 	handler.Register("ban", BanHandler, "Ban a player")
 	handler.Register("ban_player", BanPlayerSelectedHandler, "ban a player that was selected from the modal")
 	handler.Register("unban", UnBanHandler, "UnBan a player")
-	
+	handler.Register("say", SayHandler, "Sends a chat message to the server.")
 }

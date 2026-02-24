@@ -302,6 +302,25 @@ func (s *Server) cancelLaunch() string {
 func (s *Server) getPlayers() string {
 	return "display_all_clients"
 }
+
+func (s *Server) say(to string, from string, msg string) string {
+	source_id := 0xffffffff
+	dest_id := 0xffffffff
+
+	return fmt.Sprintf("chat & '%x' '%x' '%s'", source_id, dest_id, msg)
+}
+
+// Sends a message to the server
+// msg: the content of the message.
+// from: the uid of the sender.
+// to: the uid of the reciever.
+func (s *Server) Say(to string, from string, msg string) error {
+	var commands []string
+	commands = append(commands, s.say(to, from, msg))
+	err := s.Send(commands)
+	return err
+}
+
 func (s *Server) GetPlayers() string {
 	conn, err := rcon.Dial(fmt.Sprintf("%s:%s", s.RconConfig.Ip, s.RconConfig.Port), s.RconConfig.Pword)
 	if err != nil {
