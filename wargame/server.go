@@ -300,7 +300,9 @@ func (s *Server) cancelLaunch() string {
 }
 
 func (s *Server) getPlayers() string {
-	return "display_all_clients"
+	return "chat"
+	// This command was changes to "chat" with the modiefied bonary
+	//return "chat"
 }
 
 func (s *Server) say(to string, from string, msg string) string {
@@ -335,12 +337,25 @@ func (s *Server) GetPlayers() string {
 	return ack
 }
 
+func (s *Server) RawRcon(cmd string) string {
+	conn, err := rcon.Dial(fmt.Sprintf("%s:%s", s.RconConfig.Ip, s.RconConfig.Port), s.RconConfig.Pword)
+	if err != nil {
+		log.Printf("[RCON] err: %s", err.Error())
+	}
+	s.Conn = *conn
+
+	ack, err := s.Conn.Execute(cmd)
+
+	conn.Close()
+
+	return ack
+}
+
 func (s *Server) setDeckCode(playerID string, deckCode string) string {
 	return fmt.Sprintf("setpvar %s PlayerDeckContent %s", playerID, deckCode)
 }
 
 func (s *Server) SetDeckCode(playerID string, deckCode string) string {
-
 	conn, err := rcon.Dial(fmt.Sprintf("%s:%s", s.RconConfig.Ip, s.RconConfig.Port), s.RconConfig.Pword)
 	if err != nil {
 		log.Printf("[RCON] err: %s", err.Error())
