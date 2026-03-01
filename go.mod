@@ -4,6 +4,8 @@ go 1.25.5
 
 require github.com/bwmarrin/discordgo v0.29.0
 
+require github.com/mattn/go-sqlite3 v1.14.34 // indirect
+
 require (
 	github.com/gorcon/rcon v1.4.0
 	github.com/gorilla/websocket v1.4.2 // indirect
