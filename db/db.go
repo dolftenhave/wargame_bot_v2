@@ -12,30 +12,32 @@ import (
 
 type (
 	Mode struct {
-		ID              int    `db:"id" sqltype:"INTEGER PRIMARY KEY"`
-		Name            string `db:"name" sqltype:"TEXT NOT NULL"`
-		Server_name     string `db:"name" sqltype:"TEXT"`
-		Starting_points int    `db:"starting_points" sqltype:"INTEGER"`
-		Time_limit      int    `db:"time_limit" sqltype:"INTEGER"`
-		Score_limit     int    `db:"score_limit" sqltype:"INTEGER"`
-		Income          int    `db:"income" sqltype:"INTEGER"`
-		Game_mode       int    `db:"game_mode" sqltype:"INTEGER"`
-		Oposition       int    `db:"oposition" sqltype:"INTEGER"`
-		Nations         int    `db:"nations" sqltype:"INTEGER"`
-		Era             int    `db:"era" sqltype:"INTEGER"`
-		Theme           int    `db:"theme" sqltype:"INTEGER"`
-		Min_players     int    `db:"min_players" sqltype:"INTEGER"`
-		Warmup_time     int    `db:"warmup_time" sqltype:"INTEGER"`
-		Deploy_time     int    `db:"deploy_time" sqltype:"INTEGER"`
-		Debrief_time    int    `db:"debrief_time" sqltype:"INTEGER"`
-		Loading_time    int    `db:"loading_time" sqltype:"INTEGER"`
-		Auto_start      bool   `db:"auto_start" sqltype:"INTEGER"`
-		Auto_rotate     bool   `db:"auto_rotate" sqltype:"INTEGER"`
-		Vote            bool   `db:"vote" sqltype:"INTEGER"`
+		ID             int    `db:"id" sqltype:"INTEGER PRIMARY KEY"`
+		ModeName       string `db:"mode_name" sqltype:"TEXT NOT NULL"`
+		ServerName     string `db:"server_name" sqltype:"TEXT NOT NULL"`
+		StartingPoints int    `db:"starting_points" sqltype:"INTEGER"`
+		TimeLimit      int    `db:"time_limit" sqltype:"INTEGER"`
+		ScoreLimit     int    `db:"score_limit" sqltype:"INTEGER"`
+		IncomeRate     int    `db:"income_rate" sqltype:"INTEGER"`
+		GameMode       int    `db:"game_mode" sqltype:"INTEGER"`
+		Oposition      int    `db:"oposition" sqltype:"INTEGER"`
+		Nations        int    `db:"nations" sqltype:"INTEGER"`
+		Era            int    `db:"era" sqltype:"INTEGER"`
+		Theme          int    `db:"theme" sqltype:"INTEGER"`
+		TeamSize       int    `db:"team_size" sqltype:"INTEGER"`
+		MinPlayers     int    `db:"min_players" sqltype:"INTEGER"`
+		WarmupTime     int    `db:"warmup_time" sqltype:"INTEGER"`
+		DeployTime     int    `db:"deploy_time" sqltype:"INTEGER"`
+		DebriefTime    int    `db:"debrief_time" sqltype:"INTEGER"`
+		LoadingTime    int    `db:"loading_time" sqltype:"INTEGER"`
+		AutoStart      bool   `db:"auto_start" sqltype:"INTEGER"`
+		AutoRotate     bool   `db:"auto_rotate" sqltype:"INTEGER"`
+		MapVote        bool   `db:"map_vote" sqltype:"INTEGER"`
+		EnableCommands bool   `db:"enable_commands" sqltype:"INTEGER"`
 	}
 
 	MapPool struct {
-		ID              int `db:"id" sqltype:"INTEGER PRIMARY KEY"`
+		ModeId          int `db:"mode_id" sqltype:"INTEGER"`
 		Name            int `db:"name" sqltype:"TEXT NOT NULL"`
 		Income_rate     int `db:"income_rate" sqltype:"INTEGER"`
 		Starting_points int `db:"starting_points" sqltype:"INTEGER"`
@@ -65,12 +67,12 @@ type (
 	}
 
 	Wargame_Player struct {
-		ID int  `db:"id" sqltype:"INTEGER PRIMARY KEY"`
+		ID   int    `db:"id" sqltype:"INTEGER PRIMARY KEY"`
 		Name string `db:"name" sqltype:"TEXT NOT NULL"`
 	}
 
 	Discord_Player struct {
-		ID int  `db:"id" sqltype:"INTEGER PRIMARY KEY"`
+		ID   int    `db:"id" sqltype:"INTEGER PRIMARY KEY"`
 		Name string `db:"name" sqltype:"TEXT NOT NULL"`
 	}
 )

@@ -1,4 +1,4 @@
-CREATE TABLE game_mode(
+CREATE TABLE IF NOT EXISTS game_mode(
 	id INTEGER PRIMARY KEY AUTOINCREMENT,
 	mode_name TEXT NOT NULL DEFAULT 'New Server',
 	server_name TEXT NOT NULL DEFAULT '[Tactical] New Server',
@@ -24,7 +24,7 @@ CREATE TABLE game_mode(
 	enable_commands INTEGER NOT NULL DEFAULT 0
 );
 
-CREATE TABLE map_pool(
+CREATE TABLE IF NOT EXISTS map_pool(
 	mode_id INTEGER NOT NULL,
 	map_id TEXT NOT NULL,
 	name TEXT NOT NULL,
@@ -38,49 +38,52 @@ CREATE TABLE map_pool(
 	FOREIGN KEY (map_id) REFERENCES map(id) ON DELETE CASCADE
 );
 
-CREATE TABLE map(
+CREATE TABLE IF NOT EXISTS map(
 	id TEXT PRIMARY KEY,
 	name TEXT NOT NULL,
 	image TEXT,
-	size TEXT NOT NULL
+	map_type TEXT NOT NULL DEFAULT 'Ground',
+	intended_size TEXT NOT NULL
 );
 
-CREATE TABLE nation(
+CREATE TABLE IF NOT EXISTS nation(
 	id INTEGER PRIMARY KEY,
 	name TEXT NOT NULL,
 	code TEXT NOT NULL,
 	emote_id TEXT
 );
 
-CREATE TABLE specialization(
+CREATE TABLE IF NOT EXISTS specialization(
 	id INTEGER PRIMARY KEY,
 	name TEXT NOT NULL,
 	code TEXT NOT NULL,
 	emote_id TEXT
 );
 
-CREATE TABLE era(
+CREATE TABLE IF NOT EXISTS era(
 	id INTEGER PRIMARY KEY,
 	name TEXT NOT NULL,
 	code TEXT NOT NULL,
 	emote_id TEXT
 );
 
-CREATE TABLE wargame_player(
+CREATE TABLE IF NOT EXISTS wargame_player(
 	id INTEGER PRIMARY KEY,
 	name TEXT NOT NULL
 );
 
-CREATE TABLE discord_player(
+CREATE TABLE IF NOT EXISTS discord_player(
 	id INTEGER PRIMARY KEY,
 	name TEXT NOT NULL
 );
 
-CREATE TABLE account_link(
+CREATE TABLE IF NOT EXISTS account_link(
 	wargame_id INTEGER NOT NULL,
 	discord_id INTEGER NOT NULL,
 
-	PRIMARY_KEY (wargame_id, discord_id),
+	PRIMARY KEY (wargame_id, discord_id),
 	FOREIGN KEY (wargame_id) REFERENCES wargame_player(id) ON DELETE CASCADE,
 	FOREIGN KEY (discord_id) REFERENCES discord_player(id) ON DELETE CASCADE
 );
+
+-- Table content
