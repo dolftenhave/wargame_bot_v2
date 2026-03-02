@@ -1,0 +1,86 @@
+CREATE TABLE game_mode(
+	id INTEGER PRIMARY KEY AUTOINCREMENT,
+	mode_name TEXT NOT NULL DEFAULT 'New Server',
+	server_name TEXT NOT NULL DEFAULT '[Tactical] New Server',
+	starting_points INTEGER NOT NULL DEFAULT 5500,
+	time_limit INTEGER NOT NULL DEFAULT 3000,
+	score_limit INTEGER NOT NULL DEFAULT 8000,
+	income_rate INTEGER NOT NULL DEFAULT 4,
+	game_mode INTEGER NOT NULL DEFAULT 1,
+	oposition INTEGER NOT NULL DEFAULT 0,
+	nations INTEGER NOT NULL DEFAULT -1,
+	era INTEGER NOT NULL DEFAULT -1,
+	theme INTEGER NOT NULL DEFAULT -1,
+	team_size INTEGER NOT NULL DEFAULT 10,
+	min_players INTEGER NOT NULL DEFAULT 19,
+	warmup_time INTEGER NOT NULL DEFAULT 15,
+	deploy_time INTEGER NOT NULL DEFAULT 180,
+	debrief_time INTEGER NOT NULL DEFAULT 60,
+	loading_time INTEGER NOT NULL DEFAULT 60, 
+
+	auto_start INTEGER NOT NULL DEFAULT 0,
+	auto_rotate INTEGER NOT NULL DEFAULT 0,
+	map_vote INTEGER NOT NULL DEFAULT 0,
+	enable_commands INTEGER NOT NULL DEFAULT 0
+);
+
+CREATE TABLE map_pool(
+	mode_id INTEGER NOT NULL,
+	map_id TEXT NOT NULL,
+	name TEXT NOT NULL,
+	income_rate INTEGER,
+	starting_points INTEGER,
+	score_limit INTEGER,
+	time_limit INTEGER,
+
+	PRIMARY KEY (mode_id, map_id),
+	FOREIGN KEY (mode_id) REFERENCES mode(id) ON DELETE CASCADE,
+	FOREIGN KEY (map_id) REFERENCES map(id) ON DELETE CASCADE
+);
+
+CREATE TABLE map(
+	id TEXT PRIMARY KEY,
+	name TEXT NOT NULL,
+	image TEXT,
+	size TEXT NOT NULL
+);
+
+CREATE TABLE nation(
+	id INTEGER PRIMARY KEY,
+	name TEXT NOT NULL,
+	code TEXT NOT NULL,
+	emote_id TEXT
+);
+
+CREATE TABLE specialization(
+	id INTEGER PRIMARY KEY,
+	name TEXT NOT NULL,
+	code TEXT NOT NULL,
+	emote_id TEXT
+);
+
+CREATE TABLE era(
+	id INTEGER PRIMARY KEY,
+	name TEXT NOT NULL,
+	code TEXT NOT NULL,
+	emote_id TEXT
+);
+
+CREATE TABLE wargame_player(
+	id INTEGER PRIMARY KEY,
+	name TEXT NOT NULL
+);
+
+CREATE TABLE discord_player(
+	id INTEGER PRIMARY KEY,
+	name TEXT NOT NULL
+);
+
+CREATE TABLE account_link(
+	wargame_id INTEGER NOT NULL,
+	discord_id INTEGER NOT NULL,
+
+	PRIMARY_KEY (wargame_id, discord_id),
+	FOREIGN KEY (wargame_id) REFERENCES wargame_player(id) ON DELETE CASCADE,
+	FOREIGN KEY (discord_id) REFERENCES discord_player(id) ON DELETE CASCADE
+);
