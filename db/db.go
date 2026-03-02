@@ -2,28 +2,123 @@ package db
 
 import (
 	"database/sql"
+	"fmt"
+	"log"
+	"reflect"
+	"strings"
+
+	"github.com/mattn/go-sqlite3"
 )
 
 type (
-	db struct {
-
+	Mode struct {
+		ID              int    `db:"id" sqltype:"INTEGER PRIMARY KEY"`
+		Name            string `db:"name" sqltype:"TEXT NOT NULL"`
+		Server_name     string `db:"name" sqltype:"TEXT"`
+		Starting_points int    `db:"starting_points" sqltype:"INTEGER"`
+		Time_limit      int    `db:"time_limit" sqltype:"INTEGER"`
+		Score_limit     int    `db:"score_limit" sqltype:"INTEGER"`
+		Income          int    `db:"income" sqltype:"INTEGER"`
+		Game_mode       int    `db:"game_mode" sqltype:"INTEGER"`
+		Oposition       int    `db:"oposition" sqltype:"INTEGER"`
+		Nations         int    `db:"nations" sqltype:"INTEGER"`
+		Era             int    `db:"era" sqltype:"INTEGER"`
+		Theme           int    `db:"theme" sqltype:"INTEGER"`
+		Min_players     int    `db:"min_players" sqltype:"INTEGER"`
+		Warmup_time     int    `db:"warmup_time" sqltype:"INTEGER"`
+		Deploy_time     int    `db:"deploy_time" sqltype:"INTEGER"`
+		Debrief_time    int    `db:"debrief_time" sqltype:"INTEGER"`
+		Loading_time    int    `db:"loading_time" sqltype:"INTEGER"`
+		Auto_start      bool   `db:"auto_start" sqltype:"INTEGER"`
+		Auto_rotate     bool   `db:"auto_rotate" sqltype:"INTEGER"`
+		Vote            bool   `db:"vote" sqltype:"INTEGER"`
 	}
 
-	Player struct {
-		id int
-		wargame_name
-		discord_name
-		verified
-		last_played
-		banned
-		commands
+	MapPool struct {
+		ID              int `db:"id" sqltype:"INTEGER PRIMARY KEY"`
+		Name            int `db:"name" sqltype:"TEXT NOT NULL"`
+		Income_rate     int `db:"income_rate" sqltype:"INTEGER"`
+		Starting_points int `db:"starting_points" sqltype:"INTEGER"`
+		Score_limit     int `db:"score_limit" sqltype:"INTEGER"`
+		Time_limit      int `db:"time_limit" sqltype:"INTEGER"`
+	}
+
+	Map struct {
+		ID    int    `db:"id" sqltype:"TEXT PRIMARY KEY"`
+		Name  string `db:"name" sqltype:"TEXT NOT NULL"`
+		Image string `db:"image" sqltype:"TEXT"`
+		Size  string `db:"size" sqltype:"TEXT NOT NULL"`
+	}
+
+	Nation struct {
+		ID       int    `db:"id" sqltype:"INTEGER PRIMARY KEY"`
+		Name     string `db:"name" sqltype:"TEXT NOT NULL"`
+		Code     string `db:"code" sqltype:"TEXT NOT NULL"`
+		Emode_id string `db:"emode_id" sqltype:"TEXT"`
+	}
+
+	Era struct {
+		ID       int    `db:"id" sqltype:"INTEGER PRIMARY KEY"`
+		Name     string `db:"name" sqltype:"TEXT NOT NULL"`
+		Code     string `db:"code" sqltype:"TEXT NOT NULL"`
+		Emode_id string `db:"emode_id" sqltype:"TEXT"`
+	}
+
+	Wargame_Player struct {
+		ID int  `db:"id" sqltype:"INTEGER PRIMARY KEY"`
+		Name string `db:"name" sqltype:"TEXT NOT NULL"`
+	}
+
+	Discord_Player struct {
+		ID int  `db:"id" sqltype:"INTEGER PRIMARY KEY"`
+		Name string `db:"name" sqltype:"TEXT NOT NULL"`
 	}
 )
 
-// Create a template for the tables.
+// A helper function that makes it faster to define sqlite tables.
+func CreateTableSQL(tableName string, model interface{}) string {
+	t := reflect.TypeOf(model)
+	if t.Kind() == reflect.Ptr {
+		t = t.Elem()
+	}
 
-// Player
+	var columns []string
+	for i := 0; i < t.NumField(); i++ {
+		field := t.Field(i)
+		colName := field.Tag.Get("db")
+		colType := field.Tag.Get("sqltype")
+		if colName == "" || colName == "-" {
+			continue
+		}
 
-// Map
-// Mode
-// Last_State
+		if colType == "" {
+			switch field.Type.Kind() {
+			case reflect.Int, reflect.Int64:
+				colType = "INTEGER"
+			case reflect.Float64:
+				colType = "float"
+			case reflect.Bool:
+				colType = "INTEGER"
+			case reflect.String:
+				colType = "TEXT"
+			// TODO add time
+			default:
+				colType = "BLOB"
+			}
+		}
+		columns = append(columns, fmt.Sprintf("%s %s", colName, colType))
+	}
+	return fmt.Sprintf("CREATE TABLE IF NOT EXISTS %s (\n\t%s\n);", tableName, strings.Join(columns, ",\n\t"))
+}
+
+// Migrate creates tables for all provided models
+func Migrate(db *sql.DB, tables map[string]interface{}) error {
+	for name, model := range tables {
+		statement := CreateTableSQL(name, model)
+		log.Printf("[DB] Executing:\n%s\n", statement)
+		if _, err := db.Exec(statement); err != nil {
+			return fmt.Errorf("[DB] Failed to create table %s: %w", name, err)
+		}
+	}
+	return nil
+}
