@@ -1,7 +1,7 @@
-INSERT INTO map VALUES('Destruction_2x3_Montagne_1','Death Row','https://i.imgur.com/zD8DxOR.jpg','Ground',1);
-INSERT INTO map VALUES('Destruction_3x3_Marine_3_Reduite_Terrestre','Hell in a very small place','https://i.imgur.com/1h8Subh.jpg','Ground',1);
-INSERT INTO map VALUES('Destruction_2x3_Hwaseong','Nuclear winter is coming','https://i.imgur.com/RDodCEc.jpg','Ground',1);
-INSERT INTO map VALUES('Destruction_2x3_Gangjin','Mud Fight','https://i.imgur.com/zXnEn6s.jpg','Ground',1);
+INSERT INTO map VALUES('Destruction_2x3_Montagne_1','Death Row','https://i.imgur.com/hrbEbod.png','Ground',1);
+INSERT INTO map VALUES('Destruction_3x3_Marine_3_Reduite_Terrestre','Hell in a very small place','https://i.imgur.com/KC9qkLa.png','Ground',1);
+INSERT INTO map VALUES('Destruction_2x3_Hwaseong','Nuclear winter is coming','https://i.imgur.com/ErH1aXW.png','Ground',1);
+INSERT INTO map VALUES('Destruction_2x3_Gangjin','Mud Fight','https://i.imgur.com/R6nGA3h.png','Ground',1);
 INSERT INTO map VALUES('Destruction_4x4_Marine_6','Out of the blue',NULL,'Naval',1);
 INSERT INTO map VALUES('Destruction_2x3_Tohoku_Alt','Paddy Field','https://i.imgur.com/AU2q1mm.jpg','Ground',1);
 INSERT INTO map VALUES('Destruction_3x3_Muju','Plunjing Valley','https://i.imgur.com/SI3AaLG.jpg','Ground',1);
@@ -109,3 +109,4 @@ INSERT INTO map VALUES('Conquete_3x3_Thuringer_Wald','Thuringer Wald',NULL,'Grou
 INSERT INTO map VALUES('Conquete_5x3_Asgard_10v10','Asgard',NULL,'Ground',10);
 INSERT INTO map VALUES('Conquete_5x3_Gjoll_10v10','Gjoll',NULL,'Ground',10);
 INSERT INTO map VALUES('Conquete_4x4_Russian_Roulette','Russian Roulette',NULL,'Ground',10);
+
