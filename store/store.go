@@ -10,7 +10,9 @@ type Store interface {
 	DiscordPlayerStore
 	MapStore
 	ModeStore
-	IconStore
+	NationIconStore
+	SpecializationIconStore
+	EraIconStore
 	CommandStore
 }
 
@@ -51,10 +53,26 @@ type ModeStore interface {
 	GetModeByName(ctx context.Context, name string) error
 }
 
-type IconStore interface {
-	GetIconById(ctx context.Context, id int) (*domain.Icon, error)
-	GetIconByName(ctx context.Context, name string) (*domain.Icon, error)
-	GetAllIcons(ctx context.Context) ([]domain.Icon, error)
+type NationIconStore interface {
+	// Get the nation icon that matches the id, or an error if it does not exist
+	GetNationIcon(ctx context.Context, id int) (*domain.Icon, error)
+	// Get all the nation icons
+	GetAllNationIcons(ctx context.Context) ([]domain.Icon, error)
+}
+
+
+type SpecializationIconStore interface {
+	// Get the specialization icon that matches the id, or an error if it does not exist
+	GetSpecializationIcon(ctx context.Context, id int) (*domain.Icon, error)
+	// Get all the specialization icons
+	GetAllSpecializationIcons(ctx context.Context) ([]domain.Icon, error)
+}
+
+type EraIconStore interface {
+	// Get the era icon that matches the id, or an error if it does not exist
+	GetEraIcon(ctx context.Context, id int) (*domain.Icon, error)
+	// Get all the era icons
+	GetAllEraIcons(ctx context.Context) ([]domain.Icon, error)
 }
 
 type CommandStore interface {
