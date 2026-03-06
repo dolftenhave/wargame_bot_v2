@@ -69,12 +69,14 @@ CREATE TABLE IF NOT EXISTS era(
 
 CREATE TABLE IF NOT EXISTS wargame_player(
 	id INTEGER PRIMARY KEY,
-	name TEXT NOT NULL
+	name TEXT NOT NULL,
+	discord_id INTEGER
 );
 
 CREATE TABLE IF NOT EXISTS discord_player(
 	id INTEGER PRIMARY KEY,
-	name TEXT NOT NULL
+	name TEXT NOT NULL,
+	wargame_id INTEGER
 );
 
 CREATE TABLE IF NOT EXISTS account_link(
