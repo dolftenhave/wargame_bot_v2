@@ -42,7 +42,7 @@ CREATE TABLE IF NOT EXISTS map(
 	id TEXT PRIMARY KEY,
 	name TEXT NOT NULL,
 	image TEXT,
-	map_type TEXT NOT NULL DEFAULT 'Ground',
+	kind TEXT NOT NULL DEFAULT 'Land',
 	intended_size TEXT NOT NULL
 );
 

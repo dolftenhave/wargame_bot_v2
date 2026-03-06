@@ -52,7 +52,7 @@ account_link(__wargame_id__, __discord_id__)
 | __id__ | string |
 | name | string |
 | image | string |
-| map_type | string |
+| kind | string |
 | intended_size | string |
 
 | nation | |
