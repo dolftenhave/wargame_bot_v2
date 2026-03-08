@@ -14,6 +14,7 @@ type Store interface {
 	SpecializationIconStore
 	EraIconStore
 	CommandStore
+	RoleStore
 }
 
 type DiscordPlayerStore interface {
@@ -77,4 +78,10 @@ type EraIconStore interface {
 
 type CommandStore interface {
 	// TODO implement the command interface
+}
+
+type RoleStore interface {
+	// TODO Implement interface
+	ListRoles(ctx context.Context) ([]domain.Role, error)
+	CreateRole(ctx context.Context, name string, level int) (*domain.Role, error)
 }
