@@ -6,11 +6,44 @@ map(__id__, name, image, map_type, intended_size)
 nation(__id__, name, code, emote_id)
 specialization(__id__, name, code, emote_id)
 era(__id__, name, code, emote_id)
-wargame_player(__id__, name)
-discord_player(__id__, name)
-account_link(__wargame_id__, __discord_id__)
+player(__wargame_id__, discord_id, name)
+name_history(__wargame_id__, name)
+role(__id__, name)
+role_member(__player_id__, __role_id__)
+command(__name__)
+role_command(__role_id__, __command_name__)
+server_state(__id__, mode_id, map_id, state)
+online_players(__player_id__, team)
 
-## Wargame data
+```mermaid
+flowchart LR
+
+    game_mode
+    map_pool@{ shape: subproc, label: "" }
+    map
+    nation 
+    specialization
+    era
+    player
+    name_history@{ shape: subproc, label: "" }
+    role
+    role_member@{ shape: subproc, label: "" }
+    command
+    role_command@{ shape: subproc, label: "" }
+    server_state
+    online_players
+
+    game_mode -- "1,*" --- a{has} == "1,1" === map_pool
+    map_pool == "1,1" === b{has} -- "1,*" --- map
+
+    player -- "1,*" --- c{in} == "1,1" === role_member 
+    role_member == "1,1" === d{has} -- "0,*" --- role
+    role -- "0,*" --- e{can use} == "1,1" === role_command
+    role_command == "1,1" === f{lets} -- "0,*" --- command 
+    player -- "0,*" --- g{used} =="1,1"===name_history
+```
+
+## Wargame data (outdated)
 
 | mode |  |
 |:-|:-|

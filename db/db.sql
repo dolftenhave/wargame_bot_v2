@@ -69,34 +69,51 @@ CREATE TABLE IF NOT EXISTS era(
 	emote_id TEXT
 );
 
-CREATE TABLE IF NOT EXISTS wargame_player(
-	id INTEGER PRIMARY KEY,
-	name TEXT NOT NULL,
-	role INTEGER UNIQUE,
-	FOREIGN KEY (role) REFERENCES roles(id)
+-- A player using the game. They could link their discord account to their wargame account.
+CREATE TABLE IF NOT EXISTS player(
+	wargame_id INTEGER PRIMARY KEY,
+	discord_id INTEGER,
+	name TEXT NOT NULL
 );
 
-CREATE TABLE IF NOT EXISTS discord_player(
-	id INTEGER PRIMARY KEY,
-	name TEXT NOT NULL,
-	role INTEGER UNIQUE,
-
-	FOREIGN KEY (role) REFERENCES roles(id)
+-- A table that displays the name history for a player.
+CREATE TABLE IF NOT EXISTS name_history(
+	wargame_id INTEGER NOT NULL,
+	name TEXT,
+	
+	PRIMARY KEY (wargame_id, name),
+	FOREIGN KEY (wargame_id) REFERENCES wargame_player(id) ON DELETE CASCADE
 );
 
-CREATE TABLE IF NOT EXISTS roles(
+-- A list of all roles.
+CREATE TABLE IF NOT EXISTS role(
 	id INTEGER PRIMARY KEY,
-	name TEXT NOT NULL UNIQUE,
-	level INTEGER NOT NULL UNIQUE
+	name TEXT NOT NULL UNIQUE
 ); 
 
-CREATE TABLE IF NOT EXISTS account_link(
-	wargame_id INTEGER NOT NULL,
-	discord_id INTEGER NOT NULL,
+-- A table that groups roles and members
+CREATE TABLE IF NOT EXISTS role_member(
+	player_id INTEGER NOT NULL,
+	role_id INTEGER NOT NULL,
 
-	PRIMARY KEY (wargame_id, discord_id),
-	FOREIGN KEY (wargame_id) REFERENCES wargame_player(id) ON DELETE CASCADE,
-	FOREIGN KEY (discord_id) REFERENCES discord_player(id) ON DELETE CASCADE
+	PRIMARY KEY (player_id, role_id),
+	FOREIGN KEY (player_id) REFERENCES player(wargame_id) ON DELETE CASCADE,
+	FOREIGN KEY (role_id) REFERENCES role(id) ON DELETE CASCADE
+);
+
+-- A list of all registered text commands.
+CREATE TABLE IF NOT EXISTS command(
+	name TEXT PRIMARY KEY		
+);
+
+-- The commands that the role has access too.
+CREATE TABLE IF NOT EXISTS role_command(
+	role_id INTEGER NOT NULL,
+	command_name TEXT NOT NULL,
+
+	PRIMARY KEY (role_id, command_name),
+	FOREIGN KEY (role_id) REFERENCES role(id) ON DELETE CASCADE,
+	FOREIGN KEY (command_name) REFERENCES command(name) ON DELETE CASCADE
 );
 
 -- The current server state
@@ -112,8 +129,8 @@ CREATE TABLE IF NOT EXISTS server_state(
 
 -- A table that contains the id's of all the players currently online.
 CREATE TABLE IF NOT EXISTS online_players(
-	id INTEGER PRIMARY KEY,
+	player_id INTEGER PRIMARY KEY,
 	team INTEGER NOT NULL CHECK(team == 0 OR team == 1),
 
-	FOREIGN KEY (id) REFERENCES wargame_player(id)
+	FOREIGN KEY (player_id) REFERENCES player(wargame_id)
 );

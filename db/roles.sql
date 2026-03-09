@@ -1,4 +1,4 @@
-INSERT OR IGNORE INTO roles (id, name, level) VALUES (1, 'none', 0);
-INSERT OR IGNORE INTO roles (id, name, level) VALUES (2, 'everyone', 1);
-INSERT OR IGNORE INTO roles (id, name, level) VALUES (3, 'moderator', 10);
-INSERT OR IGNORE INTO roles (id, name, level) VALUES (4, 'moderator', 100);
+INSERT OR IGNORE INTO role (id, name) VALUES (1, 'none');
+INSERT OR IGNORE INTO role (id, name) VALUES (2, 'wargame');
+INSERT OR IGNORE INTO role (id, name) VALUES (3, 'discord');
+INSERT OR IGNORE INTO role (id, name) VALUES (4, 'admin');
