@@ -104,6 +104,7 @@ CREATE TABLE IF NOT EXISTS role_member(
 -- A list of all registered text commands.
 CREATE TABLE IF NOT EXISTS command(
 	name TEXT PRIMARY KEY		
+	description TEXT
 );
 
 -- The commands that the role has access too.
