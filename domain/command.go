@@ -4,5 +4,5 @@ package domain
 type Command struct {
 	SenderID int
 	Source string
-	Content string
+	Description string
 }
