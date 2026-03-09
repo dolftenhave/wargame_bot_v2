@@ -24,10 +24,11 @@ CREATE TABLE IF NOT EXISTS game_mode(
 	enable_commands INTEGER NOT NULL DEFAULT 0
 );
 
+-- A table that contains maps currently in the modes map pool.
+-- The maps may have overides for the current modes settings.
 CREATE TABLE IF NOT EXISTS map_pool(
 	mode_id INTEGER NOT NULL,
 	map_id TEXT NOT NULL,
-	name TEXT NOT NULL,
 	income_rate INTEGER,
 	starting_points INTEGER,
 	score_limit INTEGER,
@@ -38,6 +39,7 @@ CREATE TABLE IF NOT EXISTS map_pool(
 	FOREIGN KEY (map_id) REFERENCES map(id) ON DELETE CASCADE
 );
 
+-- A table that conains data about a wargame map.
 CREATE TABLE IF NOT EXISTS map(
 	id TEXT PRIMARY KEY,
 	name TEXT NOT NULL,
@@ -82,10 +84,10 @@ CREATE TABLE IF NOT EXISTS discord_player(
 	FOREIGN KEY (role) REFERENCES roles(id)
 );
 
-CREATE TABLE IF NOT EXISTS roles (
+CREATE TABLE IF NOT EXISTS roles(
 	id INTEGER PRIMARY KEY,
 	name TEXT NOT NULL UNIQUE,
-	level INTEGER NOT NULL UNIQUE,
+	level INTEGER NOT NULL UNIQUE
 ); 
 
 CREATE TABLE IF NOT EXISTS account_link(
@@ -97,4 +99,21 @@ CREATE TABLE IF NOT EXISTS account_link(
 	FOREIGN KEY (discord_id) REFERENCES discord_player(id) ON DELETE CASCADE
 );
 
--- Table content
+-- The current server state
+CREATE TABLE IF NOT EXISTS server_state(
+	id INTEGER PRIMARY KEY,
+	mode_id INTEGER NOT NULL,
+	map_id INTEGER NOT NULL,
+	state INTEGER NOT NULL,
+
+	FOREIGN KEY (mode_id) REFERENCES mode(id),
+	FOREIGN KEY (map_id) REFERENCES map(id)
+);
+
+-- A table that contains the id's of all the players currently online.
+CREATE TABLE IF NOT EXISTS online_players(
+	id INTEGER PRIMARY KEY,
+	team INTEGER NOT NULL CHECK(team == 0 OR team == 1),
+
+	FOREIGN KEY (id) REFERENCES wargame_player(id)
+);
