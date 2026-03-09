@@ -3,20 +3,17 @@ package command
 import (
 	"fmt"
 	"log"
-	"wargame-bot/wargame"
 )
 
 // A collection of all registered commands
 type Registry struct {
 	commands map[string]*Command
-	wargame *wargame.Wargame
 }
 
 // Create a new command registry
-func NewRegistry(w *wargame.Wargame) *Registry {
+func NewRegistry() *Registry {
 	return &Registry{
 		commands: make(map[string]*Command),
-		wargame: w,
 	}
 }
 
@@ -45,7 +42,7 @@ func (r Registry) Execute(name string, caller Caller, args []string) CommandResu
 	}
 
 	// Execute the command handler
-	return cmd.Handler(r.wargame, caller, args)
+	return cmd.Handler(caller, args)
 }
 
 // Return a registered command
