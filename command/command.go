@@ -1,6 +1,5 @@
 package command
 
-import "wargame-bot/wargame"
 
 type PermissionLevel int
 
@@ -26,7 +25,7 @@ type Caller struct {
 }
 
 // The command handler
-type HanlerFunc func(w *wargame.Wargame, caller Caller, args []string) CommandResult
+type HandlerFunc func(caller Caller, args []string) CommandResult
 
 // A single command with meta data
 type Command struct {
@@ -37,5 +36,5 @@ type Command struct {
 	// The required permission in order to use the command
 	Permission PermissionLevel
 	// A pointer to the command handler
-	Handler HanlerFunc
+	Handler HandlerFunc
 }
