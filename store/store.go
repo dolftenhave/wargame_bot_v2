@@ -19,20 +19,20 @@ type Store interface {
 
 type DiscordPlayerStore interface {
 	NewDiscordPlayer(ctx context.Context, player *domain.DiscordPlayer) error
-	LinkDiscordPlayer(ctx context.Context, player *domain.DiscordPlayer, player2 *domain.WargamePlayer) error
+	LinkDiscordPlayer(ctx context.Context, player *domain.DiscordPlayer, player2 *domain.Player) error
 	GetDiscordPlayerByName(ctx context.Context, name string) ([]domain.DiscordPlayer, error)
 	UpdateDiscordPlayerName(ctx context.Context, player *domain.DiscordPlayer, newName string) error
 	DeleteDiscordPlayer(ctx context.Context, player *domain.DiscordPlayer) error
 }
 
 type WargamePlayerStore interface {
-	NewWargamePlayer(ctx context.Context, player *domain.WargamePlayer) error
-	LinkWargamePlayer(ctx context.Context, player *domain.WargamePlayer, player2 *domain.DiscordPlayer) error
-	GetWargamePlayerByName(ctx context.Context, name string) ([]domain.WargamePlayer, error)
-	UpdateWargamePlayerName(ctx context.Context, player *domain.WargamePlayer, newName string) error
-	DeleteWargamePlayer(ctx context.Context, player *domain.WargamePlayer) error
-	IsLinkedToDiscordPlayer(ctx context.Context, player *domain.WargamePlayer) (bool, error)
-	GetDiscordLink(ctx context.Context, player *domain.WargamePlayer) (*domain.DiscordPlayer, error)
+	NewWargamePlayer(ctx context.Context, player *domain.Player) error
+	LinkWargamePlayer(ctx context.Context, player *domain.Player, player2 *domain.DiscordPlayer) error
+	GetWargamePlayerByName(ctx context.Context, name string) ([]domain.Player, error)
+	UpdateWargamePlayerName(ctx context.Context, player *domain.Player, newName string) error
+	DeleteWargamePlayer(ctx context.Context, player *domain.Player) error
+	IsLinkedToDiscordPlayer(ctx context.Context, player *domain.Player) (bool, error)
+	GetDiscordLink(ctx context.Context, player *domain.Player) (*domain.DiscordPlayer, error)
 }
 
 type MapStore interface {
@@ -51,7 +51,10 @@ type ModeStore interface {
 	UpdateMode(ctx context.Context, mode *domain.Mode) error
 	DeleteMode(ctx context.Context, mode *domain.Mode) error
 
-	GetModeByName(ctx context.Context, name string) error
+	GetModeByName(ctx context.Context, name string) (*domain.Mode, error)
+	GetDefaultMode(ctx context.Context) (*domain.Mode, error)
+	// Gets all the maps in the mode's map pool.
+	GetMaps(ctx context.Context) ([]domain.MapPoolItem, error)
 }
 
 type NationIconStore interface {
