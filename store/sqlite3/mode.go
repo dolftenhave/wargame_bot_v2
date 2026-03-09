@@ -74,3 +74,32 @@ func (sqlite3 *Sqlite3Store) GetDefaultMode(ctx context.Context) (*domain.Mode, 
 	}
 	return scanMode(rows)
 }
+
+func (s *Sqlite3Store) AddMapToPool(ctx context.Context, mapItem *domain.MapPoolItem) error {
+	return nil
+}
+
+
+func (s *Sqlite3Store) RemoveMapFromPool(ctx context.Context, mapCode string) error {
+	return nil
+}
+
+func (s *Sqlite3Store) AddMode(ctx context.Context, newMode *domain.Mode) error{
+ 	return nil
+}
+
+func (s *Sqlite3Store) UpdateMode(ctx context.Context, newMode *domain.Mode) error{
+ 	return nil
+}
+
+func (s *Sqlite3Store) DeleteMode(ctx context.Context, mode *domain.Mode) error {
+	return nil
+}
+
+func (s *Sqlite3Store) GetMapsForMode(ctx context.Context) ([]domain.MapPoolItem, error) {
+	return nil, nil
+}
+
+func (s *Sqlite3Store) ListModes(ctx context.Context) ([]domain.Mode, error) {
+	return nil, nil
+}

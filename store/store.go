@@ -35,7 +35,7 @@ type MapStore interface {
 	// All maps that are of Size size
 	GetMapBySize(ctx context.Context, size int) ([]domain.Map, error)
 	// All maps that are of Kind kind
-	GetMapByKind(ctx context.Context, size int) ([]domain.Map, error)
+	GetMapByKind(ctx context.Context, kind string) ([]domain.Map, error)
 }
 
 type ModeStore interface {
@@ -47,9 +47,9 @@ type ModeStore interface {
 	GetDefaultMode(ctx context.Context) (*domain.Mode, error)
 	ListModes(ctx context.Context) ([]domain.Mode, error)
 	// Gets all the maps in the current mode's map pool.
-	GetMaps(ctx context.Context) ([]domain.MapPoolItem, error)
-	AddMap(ctx context.Context, mapItem *domain.MapPoolItem) error
-	RemoveMap(ctx context.Context, mapCode string) error
+	GetMapsForMode(ctx context.Context) ([]domain.MapPoolItem, error)
+	AddMapToPool(ctx context.Context, mapItem *domain.MapPoolItem) error
+	RemoveMapFromPool(ctx context.Context, mapCode string) error
 }
 
 type NationIconStore interface {
