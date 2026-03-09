@@ -1,6 +1,6 @@
 package domain
 
-type WargamePlayer struct {
+type Role struct {
 	ID int
 	Name string
 }

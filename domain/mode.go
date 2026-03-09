@@ -2,7 +2,7 @@ package domain
 
 // Mode represends a the mode the servere is currently running on.
 type Mode struct {
-	ID int
+	Maps []MapPoolItem
 	Name string
 	ServerName string
 	StartingPoints int

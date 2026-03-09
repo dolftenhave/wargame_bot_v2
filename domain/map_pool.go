@@ -1,9 +1,8 @@
 package domain
 
 //MapPool represents a map that is in the map pool of a mode
-type MapPool struct {
-	ModeId int
-	MapId int
+type MapPoolItem struct {
+	MapCode string
 	Name string
 	IncomeRate int
 	StartingPoints int
