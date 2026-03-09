@@ -6,8 +6,7 @@ import (
 )
 
 type Store interface {
-	WargamePlayerStore
-	DiscordPlayerStore
+	PlayerStore
 	MapStore
 	ModeStore
 	NationIconStore
@@ -17,22 +16,15 @@ type Store interface {
 	RoleStore
 }
 
-type DiscordPlayerStore interface {
-	NewDiscordPlayer(ctx context.Context, player *domain.DiscordPlayer) error
-	LinkDiscordPlayer(ctx context.Context, player *domain.DiscordPlayer, player2 *domain.Player) error
-	GetDiscordPlayerByName(ctx context.Context, name string) ([]domain.DiscordPlayer, error)
-	UpdateDiscordPlayerName(ctx context.Context, player *domain.DiscordPlayer, newName string) error
-	DeleteDiscordPlayer(ctx context.Context, player *domain.DiscordPlayer) error
-}
-
-type WargamePlayerStore interface {
-	NewWargamePlayer(ctx context.Context, player *domain.Player) error
-	LinkWargamePlayer(ctx context.Context, player *domain.Player, player2 *domain.DiscordPlayer) error
-	GetWargamePlayerByName(ctx context.Context, name string) ([]domain.Player, error)
-	UpdateWargamePlayerName(ctx context.Context, player *domain.Player, newName string) error
-	DeleteWargamePlayer(ctx context.Context, player *domain.Player) error
-	IsLinkedToDiscordPlayer(ctx context.Context, player *domain.Player) (bool, error)
-	GetDiscordLink(ctx context.Context, player *domain.Player) (*domain.DiscordPlayer, error)
+type PlayerStore interface {
+	RegisterPlayer(ctx context.Context, player *domain.Player) error
+	LinkDiscord(ctx context.Context, playerID int, discordID int) error
+	GetPlayerByName(ctx context.Context, name string) ([]domain.Player, error)
+	UpdatePlayerName(ctx context.Context, playerID int, newName string) error
+	DeletePlayer(ctx context.Context, playerID int) error
+	IsLinked(ctx context.Context, playerID int) (bool, error)
+	GetDiscordLink(ctx context.Context, playerID int) (int, error)
+	GetWargameId(ctx context.Context, discordID int) (int, error)
 }
 
 type MapStore interface {
@@ -51,10 +43,13 @@ type ModeStore interface {
 	UpdateMode(ctx context.Context, mode *domain.Mode) error
 	DeleteMode(ctx context.Context, mode *domain.Mode) error
 
-	GetModeByName(ctx context.Context, name string) (*domain.Mode, error)
+	GetModeByName(ctx context.Context, name string) ([]domain.Mode, error)
 	GetDefaultMode(ctx context.Context) (*domain.Mode, error)
-	// Gets all the maps in the mode's map pool.
+	ListModes(ctx context.Context) ([]domain.Mode, error)
+	// Gets all the maps in the current mode's map pool.
 	GetMaps(ctx context.Context) ([]domain.MapPoolItem, error)
+	AddMap(ctx context.Context, mapItem *domain.MapPoolItem) error
+	RemoveMap(ctx context.Context, mapCode string) error
 }
 
 type NationIconStore interface {
@@ -80,11 +75,19 @@ type EraIconStore interface {
 }
 
 type CommandStore interface {
-	// TODO implement the command interface
+	AddCommand(ctx context.Context, commandName string) error
+	RemoveCommand(ctx context.Context, commandName string) error
+	ListCommands(ctx context.Context) ([]domain.Command, error)
+	FindCommand(ctx context.Context, commandName string) ([]domain.Command, error)
 }
 
 type RoleStore interface {
-	// TODO Implement interface
 	ListRoles(ctx context.Context) ([]domain.Role, error)
 	CreateRole(ctx context.Context, name string, level int) (*domain.Role, error)
+	AddPlayerToRole(ctx context.Context, playerID int, roleID int) error
+	RemovePlayerFromRole(ctx context.Context, playerID int, roleID int) error
+	ListPlayerRoles(ctx context.Context, playerID int) ([]domain.Role, error)
+	ListCommandsInRole(ctx context.Context) ([]domain.Command, error)
+	AddCommandToRole(ctx context.Context, roleID int, commandName string) error
+	RemoveCommandFromRole(ctx context.Context, roleID int, commandName string) error
 }
