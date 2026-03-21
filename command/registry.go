@@ -3,46 +3,61 @@ package command
 import (
 	"fmt"
 	"log"
+	"wargame-bot/store"
 )
 
 // A collection of all registered commands
 type Registry struct {
 	commands map[string]*Command
+	store    store.Store
+	rcon     RconClient
 }
 
 // Create a new command registry
-func NewRegistry() *Registry {
+func NewRegistry(store store.Store, rcon RconClient) *Registry {
 	return &Registry{
 		commands: make(map[string]*Command),
+		store:    store,
+		rcon:     rcon,
 	}
 }
 
 // Register a command
-func (r *Registry) Register(cmd *Command) {
-	r.commands[cmd.Name] = cmd
-	log.Printf("[Registry] Registered command: %s", cmd.Name)
+func (r *Registry) Register(cmd ...*Command) {
+	// TODO complete
+	for _, c := range cmd {
+		r.commands[c.Name] = c
+		log.Printf("[Registry] Registered command: %s", c.Name)
+	}
 }
 
 // Execute a command if it exists.
 func (r Registry) Execute(name string, caller Caller, args []string) CommandResult {
-	cmd, exists := r.commands[name] 
+	cmd, exists := r.commands[name]
 
 	if !exists {
-		return CommandResult {
-			Type: ResultError,
+		return CommandResult{
+			Type:    ResultError,
 			Message: fmt.Sprintf("Unknown Command: %s", name),
 		}
 	}
 
+	// check command permission.
 	if caller.Permission < cmd.Permission {
 		return CommandResult{
-			Type: ResultError,
+			Type:    ResultError,
 			Message: "Sorry, you do not have permission to use this command.",
 		}
 	}
 
+	ctx := CommandContext{
+		Caller: caller,
+		Args:   args,
+		Store:  r.store,
+		Rcon:   r.rcon,
+	}
 	// Execute the command handler
-	return cmd.Handler(caller, args)
+	return cmd.Handler(ctx)
 }
 
 // Return a registered command

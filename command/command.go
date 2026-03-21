@@ -1,5 +1,6 @@
 package command
 
+import "wargame-bot/store"
 
 type PermissionLevel int
 
@@ -24,8 +25,24 @@ type Caller struct {
 	Source string
 }
 
+// Provides context to each command
+type CommandContext struct {
+	Caller Caller
+	Args   []string
+	// Access to the repo interface
+	Store store.Store
+	// Access to the rcon client interface
+	Rcon RconClient
+}
+
+// An interface for the rcon client
+type RconClient interface {
+	Execute(command string) (string, error)
+	Say(to, from, msg string) error
+}
+
 // The command handler
-type HandlerFunc func(caller Caller, args []string) CommandResult
+type HandlerFunc func(ctx CommandContext) CommandResult
 
 // A single command with meta data
 type Command struct {
