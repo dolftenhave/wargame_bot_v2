@@ -21,7 +21,7 @@ type Client interface {
 }
 
 // Creates a new rcon client
-func New(address string, port string, password string) (Client, error) {
+func NewRconClient(address string, port string, password string) (Client, error) {
 	conn, err := gorcon.Dial(fmt.Sprintf("%s:%s", address, port), password)
 	if err != nil {
 		return nil, fmt.Errorf("rcon dial: %w", err)

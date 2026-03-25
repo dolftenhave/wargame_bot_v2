@@ -8,6 +8,7 @@ import (
 	"gopkg.in/yaml.v2"
 	"wargame-bot/command"
 	"wargame-bot/discord"
+	"wargame-bot/rcon"
 	sqlite3store "wargame-bot/store/sqlite3"
 
 	"github.com/bwmarrin/discordgo"
@@ -69,7 +70,10 @@ func main(){
 	defer db.Close()
 	store := sqlite3store.NewSqlite3Store(db)
 
-	rcon := NewRconClient(conf.rcon.ip, conf.rcon.port, conf.rcon.pword)
+	rcon, err := rcon.NewRconClient(conf.rcon.ip, conf.rcon.port, conf.rcon.pword)
+	if err != nil {
+		log.Fatal(err)
+	}
 
 	registry := command.NewRegistry(store, rcon)
 	command.RegisterAllCommands(registry)

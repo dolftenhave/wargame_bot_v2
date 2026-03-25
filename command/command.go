@@ -1,6 +1,9 @@
 package command
 
-import "wargame-bot/store"
+import (
+	"wargame-bot/rcon"
+	"wargame-bot/store"
+)
 
 type PermissionLevel int
 
@@ -32,13 +35,7 @@ type CommandContext struct {
 	// Access to the repo interface
 	Store store.Store
 	// Access to the rcon client interface
-	Rcon RconClient
-}
-
-// An interface for the rcon client
-type RconClient interface {
-	Execute(command string) (string, error)
-	Say(to, from, msg string) error
+	Rcon rcon.Client
 }
 
 // The command handler

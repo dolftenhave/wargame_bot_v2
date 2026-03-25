@@ -3,6 +3,7 @@ package command
 import (
 	"fmt"
 	"log"
+	"wargame-bot/rcon"
 	"wargame-bot/store"
 )
 
@@ -10,11 +11,11 @@ import (
 type Registry struct {
 	commands map[string]*Command
 	store    store.Store
-	rcon     RconClient
+	rcon     rcon.Client
 }
 
 // Create a new command registry
-func NewRegistry(store store.Store, rcon RconClient) *Registry {
+func NewRegistry(store store.Store, rcon rcon.Client) *Registry {
 	return &Registry{
 		commands: make(map[string]*Command),
 		store:    store,
