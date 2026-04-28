@@ -19,11 +19,11 @@ import (
 const CONFIGPATH = "conf.yaml"
 
 type config struct {
-	discord struct{
+	Discord struct{
 		bot_token string `yaml:"bot_token"`
 		owner_id string `yaml:"owner_id"`
 	} `yaml:"discord"`
-	rcon struct {
+	Rcon struct {
 		ip string `yaml:"ip"`
 		port string `yaml:"port"`
 		pword string `yaml:"pword"`
@@ -38,7 +38,7 @@ func initConf() (config, error){
 		return conf, err
 	}
 
-	err = yaml.Unmarshal(confFile, conf)
+	err = yaml.Unmarshal(confFile, &conf)
 	if err != nil {
 		return conf, err
 	}
