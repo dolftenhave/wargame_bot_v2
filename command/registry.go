@@ -27,13 +27,15 @@ func NewRegistry(store store.Store, rcon rcon.Client) *Registry {
 func (r *Registry) Register(cmd ...*Command) {
 	// TODO complete
 	for _, c := range cmd {
+		// TODO add collision check and return something
+		// Add aliases?
 		r.commands[c.Name] = c
 		log.Printf("[Registry] Registered command: %s", c.Name)
 	}
 }
 
 // Execute a command if it exists.
-func (r Registry) Execute(name string, caller Caller, args []string) CommandResult {
+func (r *Registry) Execute(name string, caller Caller, args []string) CommandResult {
 	cmd, exists := r.commands[name]
 
 	if !exists {
