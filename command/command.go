@@ -1,6 +1,7 @@
 package command
 
 import (
+	"context"
 	"wargame-bot/rcon"
 	"wargame-bot/store"
 )
@@ -16,20 +17,29 @@ const (
 	PermAdmin
 )
 
+type Source int
+
+const (
+	SourceDiscord Source = iota
+	SourceGameChat
+)
+
 // The caller of the command
 type Caller struct {
 	// (player id) The id of the discord user or wargame user
-	ID int
+	ID string
 	// (Player name) The id of the discord user or wargame user
 	Name string
 	// Permission level (everyone, mod or admin)
 	Permission PermissionLevel
 	// discord or server_chat
-	Source string
+	Source Source
 }
 
 // Provides context to each command
 type CommandContext struct {
+	//TODO propegate the moved context through the project.
+	Ctx    context.Context
 	Caller Caller
 	Args   []string
 	// Access to the repo interface
@@ -47,6 +57,8 @@ type Command struct {
 	Name string
 	// A description of what the command does.
 	Description string
+	// A description of how to use it
+	Usage string
 	// The required permission in order to use the command
 	Permission PermissionLevel
 	// A pointer to the command handler
